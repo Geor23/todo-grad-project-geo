@@ -14,7 +14,14 @@ module.exports = function(grunt) {
             }
         },
         jscs: {
-            all: ["Gruntfile.js", "server.js", "server/**/*.js", "test/**/*.js", "public/**/*.js"]
+            all: ["Gruntfile.js", "server.js", "server/**/*.js", "test/**/*.js", "public/**/*.js"],
+            options: {
+                config: ".jscsrc",
+                esnext: true, // If you use ES6 http://jscs.info/overview.html#esnext
+                verbose: true, // If you need output with rule names http://jscs.info/overview.html#verbose
+                fix: true, // Autofix code style violations when possible.
+                requireCurlyBraces: [ "if" ]
+            }
         },
         mochaTest: {
             test: {

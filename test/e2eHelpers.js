@@ -1,6 +1,9 @@
 var express = require("express");
 var createServer = require("../server/server");
 var webdriver = require("selenium-webdriver");
+var chrome = require("selenium-webdriver/chrome");
+var pathc = require("chromedriver").path;
+
 var istanbul = require("istanbul");
 var path = require("path");
 var fs = require("fs");
@@ -15,8 +18,11 @@ var coverageFilename = "build_artifacts/coverage-e2e.json";
 var driver;
 var router;
 var server;
+var service;
 
 module.exports.setupDriver = function() {
+    service = new chrome.ServiceBuilder(pathc).build();
+    chrome.setDefaultService(service);
     driver = new webdriver.Builder().forBrowser("chrome").build();
 };
 
