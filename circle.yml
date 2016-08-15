@@ -4,5 +4,5 @@ general:
 deployment:
   prod:
     branch: master
-    heroku:
-      appname: todo-grad-project
+    heroku: 
+      appname: todo-grad-project-geo
