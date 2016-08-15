@@ -42,6 +42,8 @@ function getTodoList(callback) {
     createRequest.send();
 }
 
+
+
 function reloadTodoList() {
     while (todoList.firstChild) {
         todoList.removeChild(todoList.firstChild);
@@ -52,6 +54,28 @@ function reloadTodoList() {
         todos.forEach(function(todo) {
             var listItem = document.createElement("li");
             listItem.textContent = todo.title;
+            var deleteButton = document.createElement("button");
+            deleteButton.setAttribute("type", "button");
+            deleteButton.setAttribute("class", "btn btn-default");
+            deleteButton.setAttribute("id", "deleteButton");
+            var del = document.createElement("span");
+            del.setAttribute("class", "glyphicon glyphicon-remove");
+            del.setAttribute("aria-hidden", "true");
+            deleteButton.appendChild(del);
+
+            deleteButton.onclick = function() {
+                var createRequest = new XMLHttpRequest();
+                createRequest.open("DELETE", "/api/todo/"+todo.id);
+                createRequest.send();
+                createRequest.onload = function() {
+                    if (this.status === 200) {
+                        reloadTodoList();
+                    } else {
+                        error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
+                    }
+                };
+            };
+            listItem.appendChild(deleteButton);
             todoList.appendChild(listItem);
         });
     });
