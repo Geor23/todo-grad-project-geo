@@ -1,18 +1,18 @@
-<testsuite name="Mocha Tests" tests="16" failures="0" errors="0" skipped="0" timestamp="Mon, 15 Aug 2016 13:22:35 GMT" time="3.749">
-<testcase classname="end to end on page load" name="displays TODO title" time="0.25"/>
-<testcase classname="end to end on page load" name="displays empty TODO list" time="0.087"/>
-<testcase classname="end to end on page load" name="displays an error if the request fails" time="0.078"/>
-<testcase classname="end to end on create todo item" name="clears the input field" time="0.194"/>
-<testcase classname="end to end on create todo item" name="adds the todo item to the list" time="0.188"/>
-<testcase classname="end to end on create todo item" name="displays an error if the request fails" time="0.19"/>
-<testcase classname="end to end on create todo item" name="can be done multiple times" time="0.254"/>
-<testcase classname="server get list of todos" name="responds with status code 200" time="0.012"/>
-<testcase classname="server get list of todos" name="responds with a body encoded as JSON in UTF-8" time="0.01"/>
-<testcase classname="server get list of todos" name="responds with a body that is a JSON empty array" time="0.01"/>
-<testcase classname="server create a new todo" name="responds with status code 201" time="0.01"/>
-<testcase classname="server create a new todo" name="responds with the location of the newly added resource" time="0.01"/>
-<testcase classname="server create a new todo" name="inserts the todo at the end of the list of todos" time="0.01"/>
-<testcase classname="server delete a todo" name="responds with status code 404 if there is no such item" time="0.01"/>
-<testcase classname="server delete a todo" name="responds with status code 200" time="0.006"/>
-<testcase classname="server delete a todo" name="removes the item from the list of todos" time="0.003"/>
+<testsuite name="Mocha Tests" tests="16" failures="0" errors="0" skipped="0" timestamp="Mon, 15 Aug 2016 14:41:03 GMT" time="3.831">
+<testcase classname="end to end on page load" name="displays TODO title" time="0.283"/>
+<testcase classname="end to end on page load" name="displays empty TODO list" time="0.095"/>
+<testcase classname="end to end on page load" name="displays an error if the request fails" time="0.082"/>
+<testcase classname="end to end on create todo item" name="clears the input field" time="0.205"/>
+<testcase classname="end to end on create todo item" name="adds the todo item to the list" time="0.184"/>
+<testcase classname="end to end on create todo item" name="displays an error if the request fails" time="0.191"/>
+<testcase classname="end to end on create todo item" name="can be done multiple times" time="0.249"/>
+<testcase classname="server get list of todos" name="responds with status code 200" time="0.016"/>
+<testcase classname="server get list of todos" name="responds with a body encoded as JSON in UTF-8" time="0.015"/>
+<testcase classname="server get list of todos" name="responds with a body that is a JSON empty array" time="0"/>
+<testcase classname="server create a new todo" name="responds with status code 201" time="0"/>
+<testcase classname="server create a new todo" name="responds with the location of the newly added resource" time="0"/>
+<testcase classname="server create a new todo" name="inserts the todo at the end of the list of todos" time="0.015"/>
+<testcase classname="server delete a todo" name="responds with status code 404 if there is no such item" time="0"/>
+<testcase classname="server delete a todo" name="responds with status code 200" time="0.016"/>
+<testcase classname="server delete a todo" name="removes the item from the list of todos" time="0.016"/>
 </testsuite>
