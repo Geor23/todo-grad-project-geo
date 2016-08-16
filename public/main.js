@@ -52,14 +52,27 @@ function reloadTodoList() {
     getTodoList(function(todos) {
         todoListPlaceholder.style.display = "none";
         todos.forEach(function(todo) {
-            var listItem = document.createElement("li");
-            listItem.textContent = todo.title;
-            listItem.setAttribute("id", "item");
+            var row = document.createElement("li");
+            //var div =  document.createElement("div");
+            //row.setAttribute("class", "row");
+            row.setAttribute("class", "list-group-item");
 
+            var listItem = document.createElement("div");
+            //listItem.textContent = todo.title;
+            listItem.setAttribute("id", "item");
+            
+
+            var item = document.createElement("div");
+            item.textContent = todo.title;
+            item.setAttribute("id", "item");
+            item.setAttribute("style", "display: inline-block; padding-left: 10px");
+
+            // delete button
             var deleteButton = document.createElement("button");
             deleteButton.setAttribute("type", "button");
             deleteButton.setAttribute("class", "btn btn-default");
             deleteButton.setAttribute("id", "deleteButton");
+            deleteButton.setAttribute("style", "right: 1%; position: absolute");
 
             var del = document.createElement("span");
             del.setAttribute("class", "glyphicon glyphicon-remove");
@@ -67,16 +80,34 @@ function reloadTodoList() {
             deleteButton.appendChild(del);
 
 
+            // update button
             var updateButton = document.createElement("button");
             updateButton.setAttribute("type", "button");
             updateButton.setAttribute("class", "btn btn-default");
             updateButton.setAttribute("id", "updateButton");
+            updateButton.setAttribute("style", "right: 5%; position: absolute");
 
             var update = document.createElement("span");
             update.setAttribute("class", "glyphicon glyphicon-pencil");
             update.setAttribute("aria-hidden", "true");
             updateButton.appendChild(update);
 
+
+            // complete checkbox
+            var complete = document.createElement("button");
+            //complete.setAttribute("class", "input-group-addon");
+            complete.setAttribute("class", "btn btn-default");
+
+            var tick = document.createElement("input");
+            tick.setAttribute("type", "checkbox");
+            complete.appendChild(tick);
+
+            listItem.appendChild(complete);
+            listItem.appendChild(item);
+            listItem.appendChild(deleteButton);
+            listItem.appendChild(updateButton);
+            //div.appendChild(listItem);
+            row.appendChild(listItem);
 
             deleteButton.onclick = function() {
                 var createRequest = new XMLHttpRequest();
@@ -98,6 +129,7 @@ function reloadTodoList() {
                 updButton.setAttribute("type", "button");
                 updButton.setAttribute("class", "btn btn-default");
                 updButton.setAttribute("id", "doneButton");
+                updButton.setAttribute("style", "right: 5%; position: absolute");
 
                 var upd = document.createElement("span");
                 upd.setAttribute("class", "glyphicon glyphicon-ok");
@@ -134,9 +166,7 @@ function reloadTodoList() {
                 };
             };
 
-            listItem.appendChild(deleteButton);
-            listItem.appendChild(updateButton);
-            todoList.appendChild(listItem);
+            todoList.appendChild(row);
         });
     });
 }
