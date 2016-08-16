@@ -111,7 +111,7 @@ testing.describe("end to end", function() {
             helpers.addTodo("N");
             var text = helpers.updateTodo();
             text.then(function(text) {
-                assert.equal(text, "Nu");
+                assert.equal(text, "uN");
             });
         });
         testing.it("displays an error if the request fails", function() {
@@ -124,5 +124,34 @@ testing.describe("end to end", function() {
             });
         });
     });
+
+    testing.describe("on complete button", function () {
+        testing.it("mark item as complete", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            var value = helpers.completeTodo();
+            value.then(function(value) {
+                assert.equal(value, "true");
+            });
+        });
+        testing.it("mark item as incomplete", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            var value = helpers.incompleteTodo();
+            value.then(function(value) {
+                assert.equal(value, null);
+            });
+        });
+        testing.it("displays an error if the request fails", function() {
+            helpers.setupErrorRoute("put", "/api/todo/:id");
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            helpers.completeTodo();
+            helpers.getErrorText().then(function(text) {
+                assert.equal(text, "Failed to update item. Server returned 500 - Internal Server Error");
+            });
+        });
+    });
+
 });
 

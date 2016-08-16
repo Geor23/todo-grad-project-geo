@@ -63,9 +63,11 @@ function reloadTodoList() {
             var item = document.createElement("div");
             item.textContent = todo.title;
             item.setAttribute("id", "item");
-            if (todo.isComplete=="true") item.setAttribute("style", "display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px");
-            else item.setAttribute("style", "display: inline-block;  text-decoration: none; font-style: normal; padding-left: 10px");
-
+            if (todo.isComplete==="true") {
+                item.setAttribute("style", "display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px");
+            } else {
+                item.setAttribute("style", "display: inline-block;  text-decoration: none; font-style: normal; padding-left: 10px");
+            }
 
             // delete button
             var deleteButton = document.createElement("button");
@@ -96,6 +98,7 @@ function reloadTodoList() {
             complete.setAttribute("class", "btn btn-default");
             var tick = document.createElement("input");
             tick.setAttribute("type", "checkbox");
+            tick.setAttribute("id", "tick");
             if (todo.isComplete === "true") {
                 tick.setAttribute("checked", "true");
             } else {
@@ -125,7 +128,7 @@ function reloadTodoList() {
             };
 
             updateButton.onclick = function() {
-                listItem.setAttribute("contenteditable", "true");
+                item.setAttribute("contenteditable", "true");
 
                 var updButton = document.createElement("button");
                 updButton.setAttribute("type", "button");
@@ -146,8 +149,8 @@ function reloadTodoList() {
                     listItem.removeChild(updButton);
                     listItem.appendChild(updateButton);
 
-                    var title = listItem.textContent;
-                    listItem.removeAttribute("contenteditable");
+                    var title = item.textContent;
+                    item.removeAttribute("contenteditable");
 
                     var createRequest = new XMLHttpRequest();
                     createRequest.open("PUT", "/api/todo/" + todo.id);
