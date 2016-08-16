@@ -59,7 +59,7 @@ function reloadTodoList() {
     getTodoList(function(todos) {
         todoListPlaceholder.style.display = "none";
 
-        var deleteAll = document.createElement("button");
+        //var deleteAll = document.createElement("button");
         //var delAllText = document.createTextNode("Delete Completed");
         //deleteAll.appendChild(delAllText);
 
@@ -68,17 +68,15 @@ function reloadTodoList() {
         deleteAllButton.setAttribute("type", "button");
         deleteAllButton.setAttribute("class", "btn btn-default");
         deleteAllButton.setAttribute("id", "deleteAllButton");
-        deleteAllButton.setAttribute("style", "right: 1%; position: absolute");
-        var delAll = document.createElement("span");
-        delAll.setAttribute("class", "glyphicon glyphicon-remove");
-        delAll.setAttribute("aria-hidden", "true");
-        deleteAllButton.appendChild(delAll);
+        //deleteAllButton.setAttribute("style", "right: 1%; position: absolute");
+        var delAllText = document.createTextNode("Delete Completed");
+        deleteAllButton.appendChild(delAllText);
 
-        todoList.appendChild(deleteAllButton);
-        itemsLeft.appendChild(deleteAllButton);
+        //todoList.appendChild(deleteAllButton);
+        //itemsLeft.appendChild(deleteAllButton);
 
 
-        deleteAll.onclick = function () {
+        deleteAllButton.onclick = function () {
 
             todos.forEach(function(todo) {
                 if (todo.isComplete === "true") {
@@ -97,6 +95,7 @@ function reloadTodoList() {
             reloadTodoList();
         };
 
+        todoList.appendChild(deleteAllButton);
 
         todos.forEach(function(todo) {
 
@@ -254,10 +253,10 @@ function reloadTodoList() {
             };
 
             todoList.appendChild(row);
-            todoList.appendChild(deleteAllButton);
+            
         });
-
-
+    //itemsLeft.appendChild(deleteAllButton);
+    //todoList.appendChild(deleteAllButton);
 
     itemsLeft.textContent = "You have " + leftItems.toString();
     itemsLeft.textContent += " items left to complete out of " + totalItems.toString();
