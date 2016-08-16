@@ -89,6 +89,26 @@ module.exports.deleteTodo = function(text) {
     driver.findElement(webdriver.By.id("deleteButton")).click();
 };
 
+module.exports.checkUpdateButton = function() {
+
+    var todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list-placeholder"));
+    driver.wait(webdriver.until.elementIsNotVisible(todoListPlaceholder), 5000);
+    driver.findElement(webdriver.By.id("updateButton")).click();
+    return driver.findElement(webdriver.By.id("doneButton")).isDisplayed();
+};
+module.exports.checkDoneUpdateButton = function() {
+
+    var todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list-placeholder"));
+    driver.wait(webdriver.until.elementIsNotVisible(todoListPlaceholder), 5000);
+    driver.findElement(webdriver.By.id("updateButton")).click();
+    var todoListPl = driver.findElement(webdriver.By.id("doneButton"));
+    driver.wait(webdriver.until.elementIsVisible(todoListPl), 5000);
+    driver.findElement(webdriver.By.id("doneButton")).click();
+    //driver.wait(webdriver.until.elementIsNotVisible(todoListPl), 5000);
+    return driver.findElement(webdriver.By.id("updateButton")).isDisplayed();
+};
+
+
 module.exports.updateTodo = function() {
 
     var todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list-placeholder"));
@@ -111,6 +131,16 @@ module.exports.setupErrorRoute = function(action, route) {
     }
     if (action === "post") {
         router.post(route, function(req, res) {
+            res.sendStatus(500);
+        });
+    }
+    if (action === "delete") {
+        router.delete(route, function(req, res) {
+            res.sendStatus(500);
+        });
+    }
+    if (action === "put") {
+        router.put(route, function(req, res) {
             res.sendStatus(500);
         });
     }
