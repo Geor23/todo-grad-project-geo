@@ -2,6 +2,7 @@ var todoList = document.getElementById("todo-list");
 var todoListPlaceholder = document.getElementById("todo-list-placeholder");
 var form = document.getElementById("todo-form");
 var todoTitle = document.getElementById("new-todo");
+var itemsLeft = document.getElementById("count-label");
 var error = document.getElementById("error");
 
 form.onsubmit = function(event) {
@@ -50,9 +51,19 @@ function reloadTodoList() {
         todoList.removeChild(todoList.firstChild);
     }
     todoListPlaceholder.style.display = "block";
+
+    var totalItems = 0;
+    var leftItems = 0;
+
+
     getTodoList(function(todos) {
         todoListPlaceholder.style.display = "none";
         todos.forEach(function(todo) {
+
+            totalItems += 1 ;
+            if (todo.isComplete === "false") {
+                leftItems += 1 ;
+            }
 
             var row = document.createElement("li");
             row.setAttribute("class", "list-group-item");
@@ -203,7 +214,12 @@ function reloadTodoList() {
 
             todoList.appendChild(row);
         });
+
+    itemsLeft.textContent = "You have " + leftItems.toString();
+    itemsLeft.textContent += " items left to complete out of " + totalItems.toString();
+
     });
+
 }
 
 reloadTodoList();
