@@ -89,6 +89,20 @@ module.exports.deleteTodo = function(text) {
     driver.findElement(webdriver.By.id("deleteButton")).click();
 };
 
+module.exports.updateTodo = function() {
+
+    var todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list-placeholder"));
+    driver.wait(webdriver.until.elementIsNotVisible(todoListPlaceholder), 5000);
+    driver.findElement(webdriver.By.id("updateButton")).click();
+    var todoListPl = driver.findElement(webdriver.By.id("doneButton"));
+    driver.wait(webdriver.until.elementIsVisible(todoListPl), 5000);
+    var item = driver.findElement(webdriver.By.id("item")).click();
+    driver.findElement(webdriver.By.id("item")).sendKeys("u");
+    driver.wait(webdriver.until.elementIsVisible(todoListPl), 5000);
+    driver.findElement(webdriver.By.id("doneButton")).click();
+    return driver.findElement(webdriver.By.id("item")).getText();
+};
+
 module.exports.setupErrorRoute = function(action, route) {
     if (action === "get") {
         router.get(route, function(req, res) {

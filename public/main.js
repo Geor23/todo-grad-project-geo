@@ -54,14 +54,29 @@ function reloadTodoList() {
         todos.forEach(function(todo) {
             var listItem = document.createElement("li");
             listItem.textContent = todo.title;
+            listItem.setAttribute("id", "item");
+
             var deleteButton = document.createElement("button");
             deleteButton.setAttribute("type", "button");
             deleteButton.setAttribute("class", "btn btn-default");
             deleteButton.setAttribute("id", "deleteButton");
+
             var del = document.createElement("span");
             del.setAttribute("class", "glyphicon glyphicon-remove");
             del.setAttribute("aria-hidden", "true");
             deleteButton.appendChild(del);
+
+
+            var updateButton = document.createElement("button");
+            updateButton.setAttribute("type", "button");
+            updateButton.setAttribute("class", "btn btn-default");
+            updateButton.setAttribute("id", "updateButton");
+
+            var update = document.createElement("span");
+            update.setAttribute("class", "glyphicon glyphicon-pencil");
+            update.setAttribute("aria-hidden", "true");
+            updateButton.appendChild(update);
+
 
             deleteButton.onclick = function() {
                 var createRequest = new XMLHttpRequest();
@@ -75,7 +90,52 @@ function reloadTodoList() {
                     }
                 };
             };
+
+            updateButton.onclick = function() {
+                listItem.setAttribute("contenteditable", "true");
+
+                var updButton = document.createElement("button");
+                updButton.setAttribute("type", "button");
+                updButton.setAttribute("class", "btn btn-default");
+                updButton.setAttribute("id", "doneButton");
+
+                var upd = document.createElement("span");
+                upd.setAttribute("class", "glyphicon glyphicon-ok");
+                upd.setAttribute("aria-hidden", "true");
+                updButton.appendChild(upd);
+
+                listItem.removeChild(updateButton);
+                listItem.appendChild(updButton);
+
+                updButton.onclick = function() {
+
+                    listItem.removeChild(updButton);
+                    listItem.appendChild(updateButton);
+
+                    var title = listItem.textContent;
+                    listItem.removeAttribute("contenteditable");
+
+                    var createRequest = new XMLHttpRequest();
+                    createRequest.open("PUT", "/api/todo/" + todo.id);
+                    createRequest.setRequestHeader("Content-type", "application/json");
+                    createRequest.send(JSON.stringify({
+                        title: title,
+                        id : todo.id
+                    }));
+
+                    createRequest.onload = function() {
+                        if (this.status === 200) {
+                            reloadTodoList();
+                        } else {
+                            error.textContent = "Failed to update item. Server returned ";
+                            error.textContent += this.status + " - " + this.responseText;
+                        }
+                    };
+                };
+            };
+
             listItem.appendChild(deleteButton);
+            listItem.appendChild(updateButton);
             todoList.appendChild(listItem);
         });
     });

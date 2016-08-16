@@ -77,6 +77,16 @@ testing.describe("end to end", function() {
                 });
             });
         });
+    });
+    testing.describe("on update todo item", function() {
+        testing.it("updates the todo item to the list", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("N");
+            var text = helpers.updateTodo();
+            text.then(function(text) {
+                assert.equal(text, "Nu");
+            });
+        });
         // testing.it("displays an error if the request fails", function() {
         //     helpers.setupErrorRoute("post", "/api/todo");
         //     helpers.navigateToSite();
