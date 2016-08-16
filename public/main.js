@@ -67,6 +67,7 @@ function reloadTodoList() {
 
             var row = document.createElement("li");
             row.setAttribute("class", "list-group-item");
+            row.setAttribute("style", "margin: 10px");
 
             var listItem = document.createElement("div");
             
