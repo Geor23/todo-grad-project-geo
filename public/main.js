@@ -58,6 +58,46 @@ function reloadTodoList() {
 
     getTodoList(function(todos) {
         todoListPlaceholder.style.display = "none";
+
+        var deleteAll = document.createElement("button");
+        //var delAllText = document.createTextNode("Delete Completed");
+        //deleteAll.appendChild(delAllText);
+
+        // delete button
+        var deleteAllButton = document.createElement("button");
+        deleteAllButton.setAttribute("type", "button");
+        deleteAllButton.setAttribute("class", "btn btn-default");
+        deleteAllButton.setAttribute("id", "deleteAllButton");
+        deleteAllButton.setAttribute("style", "right: 1%; position: absolute");
+        var delAll = document.createElement("span");
+        delAll.setAttribute("class", "glyphicon glyphicon-remove");
+        delAll.setAttribute("aria-hidden", "true");
+        deleteAllButton.appendChild(delAll);
+
+        todoList.appendChild(deleteAllButton);
+        itemsLeft.appendChild(deleteAllButton);
+
+
+        deleteAll.onclick = function () {
+
+            todos.forEach(function(todo) {
+                if (todo.isComplete === "true") {
+                    var createRequest = new XMLHttpRequest();
+                    createRequest.open("DELETE", "/api/todo/" + todo.id);
+                    createRequest.onload = function() {
+                        if (this.status === 200) {
+                        } else {
+                            error.textContent = "Failed to delete item. Server returned ";
+                            error.textContent += this.status + " - " + this.responseText;
+                        }
+                    };
+                    createRequest.send();
+                }
+            });
+            reloadTodoList();
+        };
+
+
         todos.forEach(function(todo) {
 
             totalItems += 1 ;
@@ -71,7 +111,7 @@ function reloadTodoList() {
 
             var listItem = document.createElement("div");
             
-            // item text
+            
             var item = document.createElement("div");
             item.textContent = todo.title;
             item.setAttribute("id", "item");
@@ -81,7 +121,7 @@ function reloadTodoList() {
                 item.setAttribute("style", "display: inline-block;  text-decoration: none; font-style: normal; padding-left: 10px");
             }
 
-            // delete button
+            
             var deleteButton = document.createElement("button");
             deleteButton.setAttribute("type", "button");
             deleteButton.setAttribute("class", "btn btn-default");
@@ -93,7 +133,7 @@ function reloadTodoList() {
             deleteButton.appendChild(del);
 
 
-            // update button
+            
             var updateButton = document.createElement("button");
             updateButton.setAttribute("type", "button");
             updateButton.setAttribute("class", "btn btn-default");
@@ -105,7 +145,7 @@ function reloadTodoList() {
             updateButton.appendChild(update);
 
 
-            // complete checkbox
+            
             var complete = document.createElement("button");
             complete.setAttribute("class", "btn btn-default");
             var tick = document.createElement("input");
@@ -214,7 +254,10 @@ function reloadTodoList() {
             };
 
             todoList.appendChild(row);
+            todoList.appendChild(deleteAllButton);
         });
+
+
 
     itemsLeft.textContent = "You have " + leftItems.toString();
     itemsLeft.textContent += " items left to complete out of " + totalItems.toString();
