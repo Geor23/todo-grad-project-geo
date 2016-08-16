@@ -18,7 +18,8 @@ function createTodo(title, callback) {
     createRequest.open("POST", "/api/todo");
     createRequest.setRequestHeader("Content-type", "application/json");
     createRequest.send(JSON.stringify({
-        title: title
+        title: title,
+        isComplete: "false"
     }));
     createRequest.onload = function() {
         if (this.status === 201) {
@@ -52,20 +53,19 @@ function reloadTodoList() {
     getTodoList(function(todos) {
         todoListPlaceholder.style.display = "none";
         todos.forEach(function(todo) {
+
             var row = document.createElement("li");
-            //var div =  document.createElement("div");
-            //row.setAttribute("class", "row");
             row.setAttribute("class", "list-group-item");
 
             var listItem = document.createElement("div");
-            //listItem.textContent = todo.title;
-            listItem.setAttribute("id", "item");
             
-
+            // item text
             var item = document.createElement("div");
             item.textContent = todo.title;
             item.setAttribute("id", "item");
-            item.setAttribute("style", "display: inline-block; padding-left: 10px");
+            if (todo.isComplete=="true") item.setAttribute("style", "display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px");
+            else item.setAttribute("style", "display: inline-block;  text-decoration: none; font-style: normal; padding-left: 10px");
+
 
             // delete button
             var deleteButton = document.createElement("button");
@@ -73,7 +73,6 @@ function reloadTodoList() {
             deleteButton.setAttribute("class", "btn btn-default");
             deleteButton.setAttribute("id", "deleteButton");
             deleteButton.setAttribute("style", "right: 1%; position: absolute");
-
             var del = document.createElement("span");
             del.setAttribute("class", "glyphicon glyphicon-remove");
             del.setAttribute("aria-hidden", "true");
@@ -86,7 +85,6 @@ function reloadTodoList() {
             updateButton.setAttribute("class", "btn btn-default");
             updateButton.setAttribute("id", "updateButton");
             updateButton.setAttribute("style", "right: 5%; position: absolute");
-
             var update = document.createElement("span");
             update.setAttribute("class", "glyphicon glyphicon-pencil");
             update.setAttribute("aria-hidden", "true");
@@ -95,18 +93,22 @@ function reloadTodoList() {
 
             // complete checkbox
             var complete = document.createElement("button");
-            //complete.setAttribute("class", "input-group-addon");
             complete.setAttribute("class", "btn btn-default");
-
             var tick = document.createElement("input");
             tick.setAttribute("type", "checkbox");
+            if (todo.isComplete === "true") {
+                tick.setAttribute("checked", "true");
+            } else {
+                tick.removeAttribute("checked");
+            }
             complete.appendChild(tick);
+
 
             listItem.appendChild(complete);
             listItem.appendChild(item);
             listItem.appendChild(deleteButton);
             listItem.appendChild(updateButton);
-            //div.appendChild(listItem);
+            
             row.appendChild(listItem);
 
             deleteButton.onclick = function() {
@@ -152,6 +154,7 @@ function reloadTodoList() {
                     createRequest.setRequestHeader("Content-type", "application/json");
                     createRequest.send(JSON.stringify({
                         title: title,
+                        isComplete: todo.isComplete,
                         id : todo.id
                     }));
 
@@ -163,6 +166,35 @@ function reloadTodoList() {
                             error.textContent += this.status + " - " + this.responseText;
                         }
                     };
+                };
+            };
+
+            tick.onclick = function () {
+                var title = item.textContent;
+                var complete;
+                if (todo.isComplete === "true") {
+                    complete = "false";
+                }
+                else {
+                    complete = "true";
+                }
+
+                var createRequest = new XMLHttpRequest();
+                createRequest.open("PUT", "/api/todo/" + todo.id);
+                createRequest.setRequestHeader("Content-type", "application/json");
+                createRequest.send(JSON.stringify({
+                    title: title,
+                    id : todo.id,
+                    isComplete: complete
+                }));
+
+                createRequest.onload = function() {
+                    if (this.status === 200) {
+                        reloadTodoList();
+                    } else {
+                        error.textContent = "Failed to update item. Server returned ";
+                        error.textContent += this.status + " - " + this.responseText;
+                    }
                 };
             };
 
