@@ -4,6 +4,7 @@ var form = document.getElementById("todo-form");
 var todoTitle = document.getElementById("new-todo");
 var itemsLeft = document.getElementById("count-label");
 var error = document.getElementById("error");
+var tabs = document.getElementById("tabs");
 
 form.onsubmit = function(event) {
     var title = todoTitle.value;
@@ -12,6 +13,10 @@ form.onsubmit = function(event) {
     });
     todoTitle.value = "";
     event.preventDefault();
+};
+
+tabs.onclick = function () {
+    reloadTodoList();
 };
 
 function createTodo(title, callback) {
@@ -59,11 +64,9 @@ function reloadTodoList() {
     getTodoList(function(todos) {
         todoListPlaceholder.style.display = "none";
 
-        //var deleteAll = document.createElement("button");
-        //var delAllText = document.createTextNode("Delete Completed");
-        //deleteAll.appendChild(delAllText);
-
-        // delete button
+        var activeTab = document.getElementsByClassName("active")[0].innerText;
+        console.log(activeTab);
+    
         var deleteAllButton = document.createElement("button");
         deleteAllButton.setAttribute("type", "button");
         deleteAllButton.setAttribute("class", "btn btn-default");
@@ -72,8 +75,6 @@ function reloadTodoList() {
         var delAllText = document.createTextNode("Delete Completed");
         deleteAllButton.appendChild(delAllText);
 
-        //todoList.appendChild(deleteAllButton);
-        //itemsLeft.appendChild(deleteAllButton);
 
 
         deleteAllButton.onclick = function () {
@@ -266,3 +267,5 @@ function reloadTodoList() {
 }
 
 reloadTodoList();
+
+
