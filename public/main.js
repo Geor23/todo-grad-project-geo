@@ -62,7 +62,7 @@ function clearTodoList() {
 
 function createTodoList(todos) {
 
-        var totalItems = 0;
+    var totalItems = 0;
     var leftItems = 0;
     todoListPlaceholder.style.display = "none";
 
