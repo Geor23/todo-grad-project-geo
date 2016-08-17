@@ -75,6 +75,7 @@ function createReq(method, url, body, errorMsg, callback){
     })
     . then(function(res) {
         console.log("then : " +res);
+        error.textContent = res.responseText;
         callback();
     })
     .catch(function(res){
