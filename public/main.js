@@ -58,10 +58,10 @@ function createButton(id, icon) {
     Button.setAttribute("type", "button");
     Button.setAttribute("class", "btn btn-default");
     Button.setAttribute("id", id);
-    var del = document.createElement("span");
-    del.setAttribute("class", icon);
-    del.setAttribute("aria-hidden", "true");
-    Button.appendChild(del);
+    var span = document.createElement("span");
+    span.setAttribute("class", icon);
+    span.setAttribute("aria-hidden", "true");
+    Button.appendChild(span);
     return Button;
 }
 
