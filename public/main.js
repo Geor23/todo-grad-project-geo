@@ -107,8 +107,8 @@ function reloadTodoList() {
                 leftItems += 1 ;
             }
 
-            var first = (todo.isComplete === "true" && activeTab != "Active");
-            var second = (todo.isComplete === "false" && activeTab != "Completed");
+            var first = (todo.isComplete === "true" && !activeTab.includes("Active"));
+            var second = (todo.isComplete === "false" && !activeTab.includes("Completed"));
             if (first || second) {
 
                 var row = document.createElement("li");
