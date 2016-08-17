@@ -1,144 +1,270 @@
-var todoList = document.getElementById("todo-list");
-var todoListPlaceholder = document.getElementById("todo-list-placeholder");
-var form = document.getElementById("todo-form");
-var todoTitle = document.getElementById("new-todo");
-var error = document.getElementById("error");
+var app = angular.module('TodoApp', []);
+app.controller('mainController', function($scope) {
 
-form.onsubmit = function(event) {
-    var title = todoTitle.value;
-    createTodo(title, function() {
-        reloadTodoList();
-    });
-    todoTitle.value = "";
-    event.preventDefault();
-};
-
-function createTodo(title, callback) {
-    var createRequest = new XMLHttpRequest();
-    createRequest.open("POST", "/api/todo");
-    createRequest.setRequestHeader("Content-type", "application/json");
-    createRequest.send(JSON.stringify({
-        title: title
-    }));
-    createRequest.onload = function() {
-        if (this.status === 201) {
-            callback();
-        } else {
-            error.textContent = "Failed to create item. Server returned " + this.status + " - " + this.responseText;
-        }
-    };
-}
-
-function getTodoList(callback) {
-    var createRequest = new XMLHttpRequest();
-    createRequest.open("GET", "/api/todo");
-    createRequest.onload = function() {
-        if (this.status === 200) {
-            callback(JSON.parse(this.responseText));
-        } else {
-            error.textContent = "Failed to get list. Server returned " + this.status + " - " + this.responseText;
-        }
-    };
-    createRequest.send();
-}
+    $scope.todos;
+    $scope.todoText;
+    $scope.error;
 
 
-
-function reloadTodoList() {
-    while (todoList.firstChild) {
-        todoList.removeChild(todoList.firstChild);
-    }
-    todoListPlaceholder.style.display = "block";
-    getTodoList(function(todos) {
-        todoListPlaceholder.style.display = "none";
-        todos.forEach(function(todo) {
-            var listItem = document.createElement("li");
-            listItem.textContent = todo.title;
-            listItem.setAttribute("id", "item");
-
-            var deleteButton = document.createElement("button");
-            deleteButton.setAttribute("type", "button");
-            deleteButton.setAttribute("class", "btn btn-default");
-            deleteButton.setAttribute("id", "deleteButton");
-
-            var del = document.createElement("span");
-            del.setAttribute("class", "glyphicon glyphicon-remove");
-            del.setAttribute("aria-hidden", "true");
-            deleteButton.appendChild(del);
-
-
-            var updateButton = document.createElement("button");
-            updateButton.setAttribute("type", "button");
-            updateButton.setAttribute("class", "btn btn-default");
-            updateButton.setAttribute("id", "updateButton");
-
-            var update = document.createElement("span");
-            update.setAttribute("class", "glyphicon glyphicon-pencil");
-            update.setAttribute("aria-hidden", "true");
-            updateButton.appendChild(update);
-
-
-            deleteButton.onclick = function() {
-                var createRequest = new XMLHttpRequest();
-                createRequest.open("DELETE", "/api/todo/"+todo.id);
-                createRequest.send();
-                createRequest.onload = function() {
-                    if (this.status === 200) {
-                        reloadTodoList();
-                    } else {
-                        error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
-                    }
-                };
-            };
-
-            updateButton.onclick = function() {
-                listItem.setAttribute("contenteditable", "true");
-
-                var updButton = document.createElement("button");
-                updButton.setAttribute("type", "button");
-                updButton.setAttribute("class", "btn btn-default");
-                updButton.setAttribute("id", "doneButton");
-
-                var upd = document.createElement("span");
-                upd.setAttribute("class", "glyphicon glyphicon-ok");
-                upd.setAttribute("aria-hidden", "true");
-                updButton.appendChild(upd);
-
-                listItem.removeChild(updateButton);
-                listItem.appendChild(updButton);
-
-                updButton.onclick = function() {
-
-                    listItem.removeChild(updButton);
-                    listItem.appendChild(updateButton);
-
-                    var title = listItem.textContent;
-                    listItem.removeAttribute("contenteditable");
-
-                    var createRequest = new XMLHttpRequest();
-                    createRequest.open("PUT", "/api/todo/" + todo.id);
-                    createRequest.setRequestHeader("Content-type", "application/json");
-                    createRequest.send(JSON.stringify({
-                        title: title,
-                        id : todo.id
-                    }));
-
-                    createRequest.onload = function() {
-                        if (this.status === 200) {
-                            reloadTodoList();
-                        } else {
-                            error.textContent = "Failed to update item. Server returned ";
-                            error.textContent += this.status + " - " + this.responseText;
-                        }
-                    };
-                };
-            };
-
-            listItem.appendChild(deleteButton);
-            listItem.appendChild(updateButton);
-            todoList.appendChild(listItem);
+    $scope.addTodo = function() {
+        var title = $scope.todoText;
+        console.log(title);
+        var body= JSON.stringify({
+            title: title,
+            isComplete: "false"
         });
-    });
-}
+        $scope.createReq("POST", "/api/todo", body, "Failed to create item.");
+        $scope.getTodo();
+        $scope.todoText = "";
+    }
 
-reloadTodoList();
+    $scope.deleteTodo = function(){
+
+    }
+
+    $scope.getTodo = function() {
+        fetch( "/api/todo")
+            .then(function(res) {
+                if (res.status !== 200) {
+                    $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
+                    return;
+                } else {
+                    res.json().then(function(data) {
+                        console.log(data);
+                        $scope.todos = data;
+                    });
+                }
+            })
+            .catch(function(res){
+                $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
+            });
+    }
+
+    $scope.createReq = function (method, url, body, errorMsg){
+        fetch( url, {
+            method: method,
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: body
+        })
+        . then(function(res) {
+            if (res.status !== 200) {
+               $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;
+            }
+        })
+        .catch(function(res){
+            $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;
+        });
+    }
+
+    $scope.getTodo();
+
+});
+
+
+// var todoList = document.getElementById("todo-list");
+// var todoListPlaceholder = document.getElementById("todo-list-placeholder");
+// var form = document.getElementById("todo-form");
+// var todoTitle = document.getElementById("new-todo");
+// var itemsLeft = document.getElementById("count-label");
+// var error = document.getElementById("error");
+// var tabs = document.getElementById("tabs");
+
+// form.onsubmit = function(event) {
+//     var title = todoTitle.value;
+//     var body= JSON.stringify({
+//             title: title,
+//             isComplete: "false"
+//         });
+//     createReq("POST", "/api/todo", body, "Failed to create item.");
+//     reloadTodoList();
+//     todoTitle.value = "";
+//     event.preventDefault();
+// };
+
+// tabs.onclick = function () {
+//     reloadTodoList();
+// };
+
+
+// function createIconButton(id, icon) {
+//     var Button = document.createElement("button");
+//     Button.setAttribute("type", "button");
+//     Button.setAttribute("class", "btn btn-default");
+//     Button.setAttribute("id", id);
+//     var span = document.createElement("span");
+//     span.setAttribute("class", icon);
+//     span.setAttribute("aria-hidden", "true");
+//     Button.appendChild(span);
+//     return Button;
+// }
+
+
+
+// function clearTodoList() {
+//     while (todoList.firstChild) {
+//         todoList.removeChild(todoList.firstChild);
+//     }
+//     todoListPlaceholder.style.display = "block";
+// }
+
+// function createTodoList(todos) {
+
+//     var totalItems = 0;
+//     var leftItems = 0;
+//     todoListPlaceholder.style.display = "none";
+
+//     var activeTab = document.getElementsByClassName("active")[0].innerText;
+
+//     var deleteAllButton = document.createElement("button");
+//     deleteAllButton.setAttribute("type", "button");
+//     deleteAllButton.setAttribute("class", "btn btn-default");
+//     deleteAllButton.setAttribute("id", "deleteAllButton");
+//     var delAllText = document.createTextNode("Delete Completed");
+//     deleteAllButton.appendChild(delAllText);
+
+//     deleteAllButton.onclick = function () {
+
+//         todos.forEach(function(todo) {
+//             if (todo.isComplete === "true") {
+//                 var url = "/api/todo/" + todo.id;
+//                 createReq("DELETE", url, "", "Failed to delete item.");
+//                 reloadTodoList();
+//             }
+//         });
+//     };
+
+//     todoList.appendChild(deleteAllButton);
+
+//     todos.forEach(function(todo) {
+
+//         totalItems += 1 ;
+//         if (todo.isComplete === "false") {
+//             leftItems += 1 ;
+//         }
+
+//         var first = (todo.isComplete === "true" && !activeTab.includes("Active"));
+//         var second = (todo.isComplete === "false" && !activeTab.includes("Completed"));
+//         if (first || second) {
+
+//             var row = document.createElement("li");
+//             row.setAttribute("class", "list-group-item");
+//             row.setAttribute("style", "margin: 10px");
+
+//             var deleteButton = createIconButton("deleteButton", "glyphicon glyphicon-remove");
+//             deleteButton.setAttribute("style", "right: 1%; position: absolute");
+            
+//             var updateButton = createIconButton("updateButton", "glyphicon glyphicon-pencil");
+//             updateButton.setAttribute("style", "right: 5%; position: absolute");
+
+//             var updButton = createIconButton("doneButton", "glyphicon glyphicon-ok");
+//             updButton.setAttribute("style", "right: 5%; position: absolute");
+
+//             var listItem = document.createElement("div");
+                        
+//             var item = document.createElement("div");
+//             item.textContent = todo.title;
+//             item.setAttribute("id", "item");
+                        
+//             var complete = document.createElement("button");
+//             complete.setAttribute("class", "btn btn-default");
+//             var tick = document.createElement("input");
+//             tick.setAttribute("type", "checkbox");
+//             tick.setAttribute("id", "tick");
+
+//             if (todo.isComplete==="true") {
+//                 item.setAttribute("style", "display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px");
+//                 tick.setAttribute("checked", "true");
+//             } else {
+//                 item.setAttribute("style", "display: inline-block;  text-decoration: none; font-style: normal; padding-left: 10px");
+//                 tick.removeAttribute("checked");
+//             }
+
+//             complete.appendChild(tick);
+
+//             listItem.appendChild(complete);
+//             listItem.appendChild(item);
+//             listItem.appendChild(deleteButton);
+//             listItem.appendChild(updateButton);
+            
+//             row.appendChild(listItem);
+
+//             deleteButton.onclick = function() {
+//                 var url = "/api/todo/" + todo.id;
+//                 createReq("DELETE", url, "", "Failed to delete item.");
+//                 reloadTodoList();
+//             };
+
+//             updateButton.onclick = function() {
+
+//                 listItem.removeChild(updateButton);
+//                 listItem.appendChild(updButton);
+//                 item.setAttribute("contenteditable", "true");
+
+//                 updButton.onclick = function() {
+
+//                     listItem.removeChild(updButton);
+//                     listItem.appendChild(updateButton);
+//                     item.removeAttribute("contenteditable");
+
+//                     var url = "/api/todo/" + todo.id;
+//                     var body = JSON.stringify({
+//                         title: item.textContent,
+//                         isComplete: todo.isComplete,
+//                         id : todo.id
+//                     });
+//                     createReq("PUT", url, body, "Failed to update item.");
+//                     reloadTodoList();
+//                 };
+//             };
+
+//             tick.onclick = function () {
+//                 var completeValue;
+//                 if (todo.isComplete === "true") { completeValue = "false";
+//                 } else { completeValue = "true"; }
+
+//                 var url = "/api/todo/" + todo.id;
+//                 var body = JSON.stringify({
+//                     title: item.textContent,
+//                     isComplete: completeValue,
+//                     id : todo.id
+//                 });
+//                 createReq("PUT", url, body, "Failed to update item.");  
+//                 reloadTodoList();  
+//             };
+
+//             todoList.appendChild(row);
+//         }
+//     });
+
+//     itemsLeft.textContent = "You have " + leftItems.toString();
+//     itemsLeft.textContent += " items left to complete out of " + totalItems.toString();
+
+// }
+
+// function getTodoList() {
+//     return fetch( "/api/todo")
+//         .then(function(res) {
+//             if (res.status !== 200) {
+//                 error.textContent = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
+//                 return;
+//             } else {
+//                 return res.json();
+//             }
+//         })
+//         .catch(function(res){
+//             error.textContent = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
+//         });
+// }
+
+// $scope.reloadTodoList = function() {
+    
+//     $scope.clearTodoList();
+//     $scope.todos = $scope.getTodoList().then(data);
+    
+// }
+
+// reloadTodoList();
+
+

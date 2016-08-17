@@ -1,25 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="TodoApp">
     <head>
         <meta charset="utf-8">
         <title>TODO List</title>
         <link href="main.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
         <link rel="icon" type="image/ico" href="favicon.ico">
     </head>
-    <body>
+    <body ng-controller="mainController as todoList">
         <header>
             <h1>TODO List</h1>
         </header>
         <section>
+            <div id="count-label"></div>
+            <div id="deleteAllButton"
             <h2 id="todo-list-placeholder">Loading...</h2>
-            <ul id="todo-list"></ul>
-            <form id="todo-form">
-                <input id="new-todo" placeholder="What needs to be done?" autofocus>
+            <ul class="nav nav-tabs" id="tabs">
+              <li role="presentation" class="active" data-toggle="tab"><a>All</a></li>
+              <li role="presentation" data-toggle="tab"><a>Active</a></li>
+              <li role="presentation" data-toggle="tab"><a>Completed</a></li>
+            </ul>
+            <ul id="todo-list" class="list-group">
+                <li ng-repeat="todo in todos">
+                    {{todo.title}}
+                </li>
+            </ul>
+            <form id="todo-form" ng-submit="addTodo()">
+                <input id="new-todo" placeholder="What needs to be done?" ng-model="todoText" autofocus>
                 <input id="submit-todo" type="submit" value="Create">
             </form>
-            <div id="error"></div>
+            <div id="error" ng-model="error"></div>
         </section>
         <script type="text/javascript" src="main.js"></script>
     </body>
 </html>
+
+
+//     var deleteAllButton = document.createElement("button");
+//     deleteAllButton.setAttribute("type", "button");
+//     deleteAllButton.setAttribute("class", "btn btn-default");
+//     deleteAllButton.setAttribute("id", "deleteAllButton");
+//     var delAllText = document.createTextNode("Delete Completed");
+//     deleteAllButton.appendChild(delAllText);
+
+//     deleteAllButton.onclick = function () {
+
+//         todos.forEach(function(todo) {
+//             if (todo.isComplete === "true") {
+//                 var url = "/api/todo/" + todo.id;
+//                 createReq("DELETE", url, "", "Failed to delete item.");
+//                 reloadTodoList();
+//             }
+//         });
+//     };
+
+//     todoList.appendChild(deleteAllButton);
+
+//     todos.forEach(function(todo) {
+
+//         totalItems += 1 ;
+//         if (todo.isComplete === "false") {
+//             leftItems += 1 ;
+//         }
+
+//         var first = (todo.isComplete === "true" && !activeTab.includes("Active"));
+//         var second = (todo.isComplete === "false" && !activeTab.includes("Completed"));
+//         if (first || second) {
+
+//             var row = document.createElement("li");
+//             row.setAttribute("class", "list-group-item");
+//             row.setAttribute("style", "margin: 10px");
+
+//             var deleteButton = createIconButton("deleteButton", "glyphicon glyphicon-remove");
+//             deleteButton.setAttribute("style", "right: 1%; position: absolute");
+            
+//             var updateButton = createIconButton("updateButton", "glyphicon glyphicon-pencil");
+//             updateButton.setAttribute("style", "right: 5%; position: absolute");
+
+//             var updButton = createIconButton("doneButton", "glyphicon glyphicon-ok");
+//             updButton.setAttribute("style", "right: 5%; position: absolute");
+
+//             var listItem = document.createElement("div");
+                        
+//             var item = document.createElement("div");
+//             item.textContent = todo.title;
+//             item.setAttribute("id", "item");
+                        
+//             var complete = document.createElement("button");
+//             complete.setAttribute("class", "btn btn-default");
+//             var tick = document.createElement("input");
+//             tick.setAttribute("type", "checkbox");
+//             tick.setAttribute("id", "tick");
+
+//             if (todo.isComplete==="true") {
+//                 item.setAttribute("style", "display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px");
+//                 tick.setAttribute("checked", "true");
+//             } else {
+//                 item.setAttribute("style", "display: inline-block;  text-decoration: none; font-style: normal; padding-left: 10px");
+//                 tick.removeAttribute("checked");
+//             }
+
+//             complete.appendChild(tick);
+
+//             listItem.appendChild(complete);
+//             listItem.appendChild(item);
+//             listItem.appendChild(deleteButton);
+//             listItem.appendChild(updateButton);
+            
+//             row.appendChild(listItem);
