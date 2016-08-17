@@ -77,22 +77,17 @@ function reloadTodoList() {
     var totalItems = 0;
     var leftItems = 0;
 
-
     getTodoList(function(todos) {
         todoListPlaceholder.style.display = "none";
 
         var activeTab = document.getElementsByClassName("active")[0].innerText;
-        
 
         var deleteAllButton = document.createElement("button");
         deleteAllButton.setAttribute("type", "button");
         deleteAllButton.setAttribute("class", "btn btn-default");
         deleteAllButton.setAttribute("id", "deleteAllButton");
-        //deleteAllButton.setAttribute("style", "right: 1%; position: absolute");
         var delAllText = document.createTextNode("Delete Completed");
         deleteAllButton.appendChild(delAllText);
-
-
 
         deleteAllButton.onclick = function () {
 
