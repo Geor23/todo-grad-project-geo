@@ -104,7 +104,6 @@ module.exports.checkDoneUpdateButton = function() {
     var todoListPl = driver.findElement(webdriver.By.id("doneButton"));
     driver.wait(webdriver.until.elementIsVisible(todoListPl), 5000);
     driver.findElement(webdriver.By.id("doneButton")).click();
-    //driver.wait(webdriver.until.elementIsNotVisible(todoListPl), 5000);
     return driver.findElement(webdriver.By.id("updateButton")).isDisplayed();
 };
 
@@ -121,6 +120,23 @@ module.exports.updateTodo = function() {
     driver.wait(webdriver.until.elementIsVisible(todoListPl), 5000);
     driver.findElement(webdriver.By.id("doneButton")).click();
     return driver.findElement(webdriver.By.id("item")).getText();
+};
+
+module.exports.markTodoAsComplete = function() {
+    driver.findElement(webdriver.By.id("tick")).click();
+    var todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list-placeholder"));
+    driver.wait(webdriver.until.elementIsNotVisible(todoListPlaceholder), 5000);
+    return driver.findElement(webdriver.By.id("tick")).getAttribute("checked");
+};
+
+module.exports.markTodoAsIncomplete = function() {
+    driver.findElement(webdriver.By.id("tick")).click();
+    var todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list-placeholder"));
+    driver.wait(webdriver.until.elementIsNotVisible(todoListPlaceholder), 5000);
+    driver.findElement(webdriver.By.id("tick")).click();
+    todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list-placeholder"));
+    driver.wait(webdriver.until.elementIsNotVisible(todoListPlaceholder), 5000);
+    return driver.findElement(webdriver.By.id("tick")).getAttribute("checked");
 };
 
 module.exports.setupErrorRoute = function(action, route) {
