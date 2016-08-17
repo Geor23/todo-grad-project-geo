@@ -5,6 +5,7 @@ var todoTitle = document.getElementById("new-todo");
 var itemsLeft = document.getElementById("count-label");
 var error = document.getElementById("error");
 var tabs = document.getElementById("tabs");
+var deleteButton, updateButton, updButton, complete, item, tick, listItem;
 
 form.onsubmit = function(event) {
     var title = todoTitle.value;
@@ -33,7 +34,7 @@ function createTodo(title, callback) {
     // . then();
     var createRequest = new XMLHttpRequest();
     createRequest.open("POST", "/api/todo");
-    createRequest.setRequestHeader();
+    createRequest.setRequestHeader("Content-type", "application/json");
     createRequest.send(JSON.stringify({
         title: title,
         isComplete: "false"
@@ -84,6 +85,45 @@ function createReq(method, url, body, errorMsg){
             error.textContent = errorMsg + " Server returned " + this.status + " - " + this.responseText;
         }
     };
+}
+
+function createItem(title, completeValue) {
+
+    deleteButton = createButton("deleteButton", "glyphicon glyphicon-remove");
+    deleteButton.setAttribute("style", "right: 1%; position: absolute");
+    
+    updateButton = createButton("updateButton", "glyphicon glyphicon-pencil");
+    updateButton.setAttribute("style", "right: 5%; position: absolute");
+
+    updButton = createButton("doneButton", "glyphicon glyphicon-ok");
+    updButton.setAttribute("style", "right: 5%; position: absolute");
+
+    listItem = document.createElement("div");
+                
+    item = document.createElement("div");
+    item.textContent = title;
+    item.setAttribute("id", "item");
+                
+    complete = document.createElement("button");
+    complete.setAttribute("class", "btn btn-default");
+    tick = document.createElement("input");
+    tick.setAttribute("type", "checkbox");
+    tick.setAttribute("id", "tick");
+
+    if (completeValue==="true") {
+        item.setAttribute("style", "display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px");
+        tick.setAttribute("checked", "true");
+    } else {
+        item.setAttribute("style", "display: inline-block;  text-decoration: none; font-style: normal; padding-left: 10px");
+        tick.removeAttribute("checked");
+    }
+
+    complete.appendChild(tick);
+
+    listItem.appendChild(complete);
+    listItem.appendChild(item);
+    listItem.appendChild(deleteButton);
+    listItem.appendChild(updateButton);
 }
 
 
@@ -141,44 +181,7 @@ function reloadTodoList() {
                 row.setAttribute("class", "list-group-item");
                 row.setAttribute("style", "margin: 10px");
 
-                var listItem = document.createElement("div");
-                
-                
-                var item = document.createElement("div");
-                item.textContent = todo.title;
-                item.setAttribute("id", "item");
-                if (todo.isComplete==="true") {
-                    item.setAttribute("style", "display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px");
-                } else {
-                    item.setAttribute("style", "display: inline-block;  text-decoration: none; font-style: normal; padding-left: 10px");
-                }
-
-                
-                var deleteButton = createButton("deleteButton", "glyphicon glyphicon-remove");
-                deleteButton.setAttribute("style", "right: 1%; position: absolute");
-
-                
-                var updateButton = createButton("updateButton", "glyphicon glyphicon-pencil");
-                updateButton.setAttribute("style", "right: 5%; position: absolute");
-
-
-                var complete = document.createElement("button");
-                complete.setAttribute("class", "btn btn-default");
-                var tick = document.createElement("input");
-                tick.setAttribute("type", "checkbox");
-                tick.setAttribute("id", "tick");
-                if (todo.isComplete === "true") {
-                    tick.setAttribute("checked", "true");
-                } else {
-                    tick.removeAttribute("checked");
-                }
-                complete.appendChild(tick);
-
-
-                listItem.appendChild(complete);
-                listItem.appendChild(item);
-                listItem.appendChild(deleteButton);
-                listItem.appendChild(updateButton);
+                createItem(todo.title, todo.isComplete);
                 
                 row.appendChild(listItem);
 
@@ -189,25 +192,20 @@ function reloadTodoList() {
                 };
 
                 updateButton.onclick = function() {
-                    item.setAttribute("contenteditable", "true");
-
-                    var updButton = createButton("doneButton", "glyphicon glyphicon-ok");
-                    updButton.setAttribute("style", "right: 5%; position: absolute");
 
                     listItem.removeChild(updateButton);
                     listItem.appendChild(updButton);
+                    item.setAttribute("contenteditable", "true");
 
                     updButton.onclick = function() {
 
                         listItem.removeChild(updButton);
                         listItem.appendChild(updateButton);
-
-                        var title = item.textContent;
                         item.removeAttribute("contenteditable");
 
                         var url = "/api/todo/" + todo.id;
                         var body = JSON.stringify({
-                            title: title,
+                            title: item.textContent,
                             isComplete: todo.isComplete,
                             id : todo.id
                         });
@@ -218,23 +216,18 @@ function reloadTodoList() {
                 };
 
                 tick.onclick = function () {
-                    var complete;
-                    if (todo.isComplete === "true") {
-                        complete = "false";
-                    }
-                    else {
-                        complete = "true";
-                    }
+                    var completeValue;
+                    if (todo.isComplete === "true") { completeValue = "false";
+                    } else { completeValue = "true"; }
 
                     var url = "/api/todo/" + todo.id;
                     var body = JSON.stringify({
                         title: item.textContent,
-                        isComplete: complete,
+                        isComplete: completeValue,
                         id : todo.id
                     });
                     createReq("PUT", url, body, "Failed to update item.");
-                    reloadTodoList();
-                    
+                    reloadTodoList();     
                 };
 
                 todoList.appendChild(row);
