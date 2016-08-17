@@ -6,6 +6,7 @@ app.controller('mainController', function($scope) {
     $scope.error;
     $scope.itemsLeft = 0;
     $scope.totalItems = 0;
+    $scope.updating = false;
 
 
     $scope.addTodo = function() {
@@ -36,6 +37,17 @@ app.controller('mainController', function($scope) {
         });
     }
 
+    $scope.updateTodo = function(id, complete) {
+        var url = "/api/todo/" + id;
+        var body = JSON.stringify({
+            title: $scope.todoText,
+            isComplete: complete,
+            id : id
+        });
+        $scope.createReq("PUT", url, body, "Failed to update item.");
+        $scope.getTodoList();
+    }
+
     $scope.getTodoList = function() {
         fetch( "/api/todo")
             .then(function(res) {
@@ -48,7 +60,7 @@ app.controller('mainController', function($scope) {
                         $scope.todos = data;
                         $scope.todos.forEach(function(todo) {
                             $scope.totalItems += 1 ;
-                            if (todo.isCompleted === "false") {
+                            if (todo.isComplete === "false") {
                                 $scope.leftItems += 1 ;
                             }
                         });
@@ -99,11 +111,6 @@ app.controller('mainController', function($scope) {
 //             leftItems += 1 ;
 //         }
 
-//             deleteButton.onclick = function() {
-//                 var url = "/api/todo/" + todo.id;
-//                 createReq("DELETE", url, "", "Failed to delete item.");
-//                 reloadTodoList();
-//             };
 
 //             updateButton.onclick = function() {
 
