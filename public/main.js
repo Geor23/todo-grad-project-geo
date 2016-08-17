@@ -20,9 +20,20 @@ tabs.onclick = function () {
 };
 
 function createTodo(title, callback) {
+    // fetch( "/api/todo", {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-type", "application/json"
+    //     },
+    //     body: JSON.stringify({
+    //         title: title,
+    //         isComplete: "false"
+    //     })
+    // })
+    // . then();
     var createRequest = new XMLHttpRequest();
     createRequest.open("POST", "/api/todo");
-    createRequest.setRequestHeader("Content-type", "application/json");
+    createRequest.setRequestHeader();
     createRequest.send(JSON.stringify({
         title: title,
         isComplete: "false"
@@ -49,6 +60,32 @@ function getTodoList(callback) {
     createRequest.send();
 }
 
+function createButton(id, icon) {
+    var Button = document.createElement("button");
+    Button.setAttribute("type", "button");
+    Button.setAttribute("class", "btn btn-default");
+    Button.setAttribute("id", id);
+    var del = document.createElement("span");
+    del.setAttribute("class", icon);
+    del.setAttribute("aria-hidden", "true");
+    Button.appendChild(del);
+    return Button;
+}
+
+function createReq(method, url, body, errorMsg){
+    var createRequest = new XMLHttpRequest();
+    createRequest.open(method, url);
+    createRequest.setRequestHeader("Content-type", "application/json");
+    createRequest.send(body);
+    createRequest.onload = function() {
+        if (this.status === 200) {
+            //reloadTodoList();
+        } else {
+            error.textContent = errorMsg + " Server returned " + this.status + " - " + this.responseText;
+        }
+    };
+}
+
 
 function reloadTodoList() {
     while (todoList.firstChild) {
@@ -64,9 +101,6 @@ function reloadTodoList() {
         todoListPlaceholder.style.display = "none";
 
         var activeTab = document.getElementsByClassName("active")[0].innerText;
-        console.log(activeTab);
-
-        
         
 
         var deleteAllButton = document.createElement("button");
@@ -83,16 +117,8 @@ function reloadTodoList() {
 
             todos.forEach(function(todo) {
                 if (todo.isComplete === "true") {
-                    var createRequest = new XMLHttpRequest();
-                    createRequest.open("DELETE", "/api/todo/" + todo.id);
-                    createRequest.onload = function() {
-                        if (this.status === 200) {
-                        } else {
-                            error.textContent = "Failed to delete item. Server returned ";
-                            error.textContent += this.status + " - " + this.responseText;
-                        }
-                    };
-                    createRequest.send();
+                    var url = "/api/todo/" + todo.id;
+                    createReq("DELETE", url, "", "Failed to delete item.");
                 }
             });
             reloadTodoList();
@@ -128,30 +154,14 @@ function reloadTodoList() {
                 }
 
                 
-                var deleteButton = document.createElement("button");
-                deleteButton.setAttribute("type", "button");
-                deleteButton.setAttribute("class", "btn btn-default");
-                deleteButton.setAttribute("id", "deleteButton");
+                var deleteButton = createButton("deleteButton", "glyphicon glyphicon-remove");
                 deleteButton.setAttribute("style", "right: 1%; position: absolute");
-                var del = document.createElement("span");
-                del.setAttribute("class", "glyphicon glyphicon-remove");
-                del.setAttribute("aria-hidden", "true");
-                deleteButton.appendChild(del);
-
 
                 
-                var updateButton = document.createElement("button");
-                updateButton.setAttribute("type", "button");
-                updateButton.setAttribute("class", "btn btn-default");
-                updateButton.setAttribute("id", "updateButton");
+                var updateButton = createButton("updateButton", "glyphicon glyphicon-pencil");
                 updateButton.setAttribute("style", "right: 5%; position: absolute");
-                var update = document.createElement("span");
-                update.setAttribute("class", "glyphicon glyphicon-pencil");
-                update.setAttribute("aria-hidden", "true");
-                updateButton.appendChild(update);
 
 
-                
                 var complete = document.createElement("button");
                 complete.setAttribute("class", "btn btn-default");
                 var tick = document.createElement("input");
@@ -173,31 +183,16 @@ function reloadTodoList() {
                 row.appendChild(listItem);
 
                 deleteButton.onclick = function() {
-                    var createRequest = new XMLHttpRequest();
-                    createRequest.open("DELETE", "/api/todo/"+todo.id);
-                    createRequest.send();
-                    createRequest.onload = function() {
-                        if (this.status === 200) {
-                            reloadTodoList();
-                        } else {
-                            error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
-                        }
-                    };
+                    var url = "/api/todo/" + todo.id;
+                    createReq("DELETE", url, "", "Failed to delete item.");
+                    reloadTodoList();
                 };
 
                 updateButton.onclick = function() {
                     item.setAttribute("contenteditable", "true");
 
-                    var updButton = document.createElement("button");
-                    updButton.setAttribute("type", "button");
-                    updButton.setAttribute("class", "btn btn-default");
-                    updButton.setAttribute("id", "doneButton");
+                    var updButton = createButton("doneButton", "glyphicon glyphicon-ok");
                     updButton.setAttribute("style", "right: 5%; position: absolute");
-
-                    var upd = document.createElement("span");
-                    upd.setAttribute("class", "glyphicon glyphicon-ok");
-                    upd.setAttribute("aria-hidden", "true");
-                    updButton.appendChild(upd);
 
                     listItem.removeChild(updateButton);
                     listItem.appendChild(updButton);
@@ -210,28 +205,19 @@ function reloadTodoList() {
                         var title = item.textContent;
                         item.removeAttribute("contenteditable");
 
-                        var createRequest = new XMLHttpRequest();
-                        createRequest.open("PUT", "/api/todo/" + todo.id);
-                        createRequest.setRequestHeader("Content-type", "application/json");
-                        createRequest.send(JSON.stringify({
+                        var url = "/api/todo/" + todo.id;
+                        var body = JSON.stringify({
                             title: title,
                             isComplete: todo.isComplete,
                             id : todo.id
-                        }));
+                        });
+                        createReq("PUT", url, body, "Failed to update item.");
+                        reloadTodoList();
 
-                        createRequest.onload = function() {
-                            if (this.status === 200) {
-                                reloadTodoList();
-                            } else {
-                                error.textContent = "Failed to update item. Server returned ";
-                                error.textContent += this.status + " - " + this.responseText;
-                            }
-                        };
                     };
                 };
 
                 tick.onclick = function () {
-                    var title = item.textContent;
                     var complete;
                     if (todo.isComplete === "true") {
                         complete = "false";
@@ -240,31 +226,20 @@ function reloadTodoList() {
                         complete = "true";
                     }
 
-                    var createRequest = new XMLHttpRequest();
-                    createRequest.open("PUT", "/api/todo/" + todo.id);
-                    createRequest.setRequestHeader("Content-type", "application/json");
-                    createRequest.send(JSON.stringify({
-                        title: title,
-                        id : todo.id,
-                        isComplete: complete
-                    }));
-
-                    createRequest.onload = function() {
-                        if (this.status === 200) {
-                            reloadTodoList();
-                        } else {
-                            error.textContent = "Failed to update item. Server returned ";
-                            error.textContent += this.status + " - " + this.responseText;
-                        }
-                    };
+                    var url = "/api/todo/" + todo.id;
+                    var body = JSON.stringify({
+                        title: item.textContent,
+                        isComplete: complete,
+                        id : todo.id
+                    });
+                    createReq("PUT", url, body, "Failed to update item.");
+                    reloadTodoList();
+                    
                 };
 
                 todoList.appendChild(row);
               }
             });
-
-    //itemsLeft.appendChild(deleteAllButton);
-    //todoList.appendChild(deleteAllButton);
 
     itemsLeft.textContent = "You have " + leftItems.toString();
     itemsLeft.textContent += " items left to complete out of " + totalItems.toString();
