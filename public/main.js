@@ -8,7 +8,11 @@ var tabs = document.getElementById("tabs");
 
 form.onsubmit = function(event) {
     var title = todoTitle.value;
-    createTodo(title, function() {
+    var body= JSON.stringify({
+            title: title,
+            isComplete: "false"
+        })
+    createReq("POST", "/api/todo", body, "Failed to create item.", function() {
         reloadTodoList();
     });
     todoTitle.value = "";
@@ -18,27 +22,6 @@ form.onsubmit = function(event) {
 tabs.onclick = function () {
     reloadTodoList();
 };
-
-function createTodo(title, callback) {
-    fetch( "/api/todo", {
-        method: "POST",
-        headers: {
-            "Content-type": "application/json"
-        },
-        body: JSON.stringify({
-            title: title,
-            isComplete: "false"
-        })
-    })
-    . then(function(res) {
-        console.log("then : " +res);
-        callback();
-    })
-    .catch(function(res){
-        console.log("catch : " +res);
-        error.textContent = "Failed to create item. Server returned " + res.status + " - " + res.responseText;
-    });
-}
 
 function getTodoList(callback) {
     var createRequest = new XMLHttpRequest();
