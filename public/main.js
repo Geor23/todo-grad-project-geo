@@ -11,10 +11,9 @@ form.onsubmit = function(event) {
     var body= JSON.stringify({
             title: title,
             isComplete: "false"
-        })
-    createReq("POST", "/api/todo", body, "Failed to create item.", function() {
-        reloadTodoList();
-    });
+        });
+    createReq("POST", "/api/todo", body, "Failed to create item.");
+    reloadTodoList();
     todoTitle.value = "";
     event.preventDefault();
 };
@@ -48,7 +47,7 @@ function createIconButton(id, icon) {
     return Button;
 }
 
-function createReq(method, url, body, errorMsg, callback){
+function createReq(method, url, body, errorMsg){
     fetch( url, {
         method: method,
         headers: {
@@ -57,7 +56,9 @@ function createReq(method, url, body, errorMsg, callback){
         body: body
     })
     . then(function(res) {
-        callback();
+        if (res.status !== 200) {
+            error.textContent = errorMsg + " Server returned " + res.status + " - " + res.responseText;
+        }
     })
     .catch(function(res){
         error.textContent = errorMsg + " Server returned " + res.status + " - " + res.responseText;
@@ -91,9 +92,8 @@ function reloadTodoList() {
             todos.forEach(function(todo) {
                 if (todo.isComplete === "true") {
                     var url = "/api/todo/" + todo.id;
-                    createReq("DELETE", url, "", "Failed to delete item.", function() {
-                        reloadTodoList();
-                    });
+                    createReq("DELETE", url, "", "Failed to delete item.");
+                    reloadTodoList();
                 }
             });
         };
@@ -155,9 +155,8 @@ function reloadTodoList() {
 
                 deleteButton.onclick = function() {
                     var url = "/api/todo/" + todo.id;
-                    createReq("DELETE", url, "", "Failed to delete item.", function() {
-                        reloadTodoList();
-                    });
+                    createReq("DELETE", url, "", "Failed to delete item.");
+                    reloadTodoList();
                 };
 
                 updateButton.onclick = function() {
@@ -178,10 +177,8 @@ function reloadTodoList() {
                             isComplete: todo.isComplete,
                             id : todo.id
                         });
-                        createReq("PUT", url, body, "Failed to update item.", function() {
-                            reloadTodoList();
-                        });
-
+                        createReq("PUT", url, body, "Failed to update item.");
+                        reloadTodoList();
                     };
                 };
 
@@ -196,9 +193,8 @@ function reloadTodoList() {
                         isComplete: completeValue,
                         id : todo.id
                     });
-                    createReq("PUT", url, body, "Failed to update item.", function() {
-                        reloadTodoList();
-                    });    
+                    createReq("PUT", url, body, "Failed to update item.");  
+                    reloadTodoList();  
                 };
 
                 todoList.appendChild(row);

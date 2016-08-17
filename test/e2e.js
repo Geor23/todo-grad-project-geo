@@ -25,14 +25,6 @@ testing.describe("end to end", function() {
                 assert.equal(elements.length, 0);
             });
         });
-        testing.it("displays an error if the request fails", function() {
-            helpers.setupErrorRoute("get", "/api/todo");
-            helpers.navigateToSite();
-            helpers.getErrorText().then(function(text) {
-                console.log(text);
-                assert.equal(text, "Failed to get list. Server returned 500 - Internal Server Error");
-            });
-        });
     });
     testing.describe("on create todo item", function() {
         testing.it("clears the input field", function() {
