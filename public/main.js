@@ -57,12 +57,9 @@ function createReq(method, url, body, errorMsg, callback){
         body: body
     })
     . then(function(res) {
-        console.log("then : " +res);
-        error.textContent = res.responseText;
         callback();
     })
     .catch(function(res){
-        console.log("catch : " +res);
         error.textContent = errorMsg + " Server returned " + res.status + " - " + res.responseText;
     });
 }
