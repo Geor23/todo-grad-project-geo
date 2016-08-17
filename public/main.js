@@ -36,7 +36,7 @@ function getTodoList(callback) {
     createRequest.send();
 }
 
-function createButton(id, icon) {
+function createIconButton(id, icon) {
     var Button = document.createElement("button");
     Button.setAttribute("type", "button");
     Button.setAttribute("class", "btn btn-default");
@@ -115,13 +115,13 @@ function reloadTodoList() {
                 row.setAttribute("class", "list-group-item");
                 row.setAttribute("style", "margin: 10px");
 
-                var deleteButton = createButton("deleteButton", "glyphicon glyphicon-remove");
+                var deleteButton = createIconButton("deleteButton", "glyphicon glyphicon-remove");
                 deleteButton.setAttribute("style", "right: 1%; position: absolute");
                 
-                var updateButton = createButton("updateButton", "glyphicon glyphicon-pencil");
+                var updateButton = createIconButton("updateButton", "glyphicon glyphicon-pencil");
                 updateButton.setAttribute("style", "right: 5%; position: absolute");
 
-                var updButton = createButton("doneButton", "glyphicon glyphicon-ok");
+                var updButton = createIconButton("doneButton", "glyphicon glyphicon-ok");
                 updButton.setAttribute("style", "right: 5%; position: absolute");
 
                 var listItem = document.createElement("div");
