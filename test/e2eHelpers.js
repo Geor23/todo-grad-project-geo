@@ -122,14 +122,14 @@ module.exports.updateTodo = function() {
     return driver.findElement(webdriver.By.id("item")).getText();
 };
 
-module.exports.completeTodo = function() {
+module.exports.markTodoAsComplete = function() {
     driver.findElement(webdriver.By.id("tick")).click();
     var todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list-placeholder"));
     driver.wait(webdriver.until.elementIsNotVisible(todoListPlaceholder), 5000);
     return driver.findElement(webdriver.By.id("tick")).getAttribute("checked");
 };
 
-module.exports.incompleteTodo = function() {
+module.exports.markTodoAsIncomplete = function() {
     driver.findElement(webdriver.By.id("tick")).click();
     var todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list-placeholder"));
     driver.wait(webdriver.until.elementIsNotVisible(todoListPlaceholder), 5000);

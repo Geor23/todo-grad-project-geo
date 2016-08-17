@@ -93,7 +93,7 @@ testing.describe("end to end", function() {
         testing.it("mark item as complete", function() {
             helpers.navigateToSite();
             helpers.addTodo("New todo item");
-            var value = helpers.completeTodo();
+            var value = helpers.markTodoAsComplete();
             value.then(function(value) {
                 assert.equal(value, "true");
             });
@@ -101,7 +101,7 @@ testing.describe("end to end", function() {
         testing.it("mark item as incomplete", function() {
             helpers.navigateToSite();
             helpers.addTodo("New todo item");
-            var value = helpers.incompleteTodo();
+            var value = helpers.markTodoAsIncomplete();
             value.then(function(value) {
                 assert.equal(value, null);
             });

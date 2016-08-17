@@ -194,24 +194,26 @@ function createTodoList(todos) {
 
 }
 
-function reloadTodoList() {
-    
-    clearTodoList();
-
-    fetch( "/api/todo")
+function getTodoList() {
+    return fetch( "/api/todo")
         .then(function(res) {
             if (res.status !== 200) {
                 error.textContent = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
                 return;
             } else {
-                res.json().then(function(data) {  
-                    createTodoList(data); 
-                });
+                return res.json();
             }
         })
         .catch(function(res){
             error.textContent = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
         });
+}
+
+function reloadTodoList() {
+    
+    clearTodoList();
+    getTodoList().then(createTodoList);
+    
 }
 
 reloadTodoList();
