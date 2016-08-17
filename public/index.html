@@ -36,15 +36,15 @@
                         <div id="item" ng-if="!todo.isCompleted" style="display: inline-block; padding-left: 10px">
                             {{todo.title}}
                         </div>
-                        <button id="deleteButton" type="button" class="btn btn-default" ng-click="deleteTodo()" style="right: 1%; position: absolute">
+                        <button id="deleteButton" type="button" class="btn btn-default" ng-click="deleteTodo(todo.id)" style="right: 1%; position: absolute">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true">
                             </span>
                         </button>
-                        <button id="updateButton" type="button" class="btn btn-default" ng-click="updateTodo()" style="right: 5%; position: absolute">
+                        <button id="updateButton" type="button" class="btn btn-default" ng-click="updateTodo(todo.id)" style="right: 5%; position: absolute">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true">
                             </span>
                         </button>
-                        <button id="doneButton" type="button" class="btn btn-default" ng-click="doneUpdateTodo()" style="right: 5%; position: absolute">
+                        <button id="doneButton" type="button" class="btn btn-default" ng-click="doneUpdateTodo(todo.id)" style="right: 5%; position: absolute">
                             <span class="glyphicon glyphicon-ok" aria-hidden="true">
                             </span>
                         </button>

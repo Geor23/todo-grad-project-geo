@@ -20,8 +20,8 @@ app.controller('mainController', function($scope) {
         $scope.todoText = "";
     }
 
-    $scope.deleteTodo = function() {
-        var url = "/api/todo/" + todo.id;
+    $scope.deleteTodo = function(id) {
+        var url = "/api/todo/" + id;
         $scope.createReq("DELETE", url, "", "Failed to delete item.");
         $scope.getTodoList();
     }
