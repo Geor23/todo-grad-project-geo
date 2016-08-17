@@ -22,18 +22,6 @@ tabs.onclick = function () {
     reloadTodoList();
 };
 
-function getTodoList(callback) {
-    var createRequest = new XMLHttpRequest();
-    createRequest.open("GET", "/api/todo");
-    createRequest.onload = function() {
-        if (this.status === 200) {
-            callback(JSON.parse(this.responseText));
-        } else {
-            error.textContent = "Failed to get list. Server returned " + this.status + " - " + this.responseText;
-        }
-    };
-    createRequest.send();
-}
 
 function createIconButton(id, icon) {
     var Button = document.createElement("button");
@@ -65,147 +53,165 @@ function createReq(method, url, body, errorMsg){
     });
 }
 
-
-function reloadTodoList() {
+function clearTodoList() {
     while (todoList.firstChild) {
         todoList.removeChild(todoList.firstChild);
     }
     todoListPlaceholder.style.display = "block";
+}
 
-    var totalItems = 0;
+function createTodoList(todos) {
+
+        var totalItems = 0;
     var leftItems = 0;
+    todoListPlaceholder.style.display = "none";
 
-    getTodoList(function(todos) {
-        todoListPlaceholder.style.display = "none";
+    var activeTab = document.getElementsByClassName("active")[0].innerText;
 
-        var activeTab = document.getElementsByClassName("active")[0].innerText;
+    var deleteAllButton = document.createElement("button");
+    deleteAllButton.setAttribute("type", "button");
+    deleteAllButton.setAttribute("class", "btn btn-default");
+    deleteAllButton.setAttribute("id", "deleteAllButton");
+    var delAllText = document.createTextNode("Delete Completed");
+    deleteAllButton.appendChild(delAllText);
 
-        var deleteAllButton = document.createElement("button");
-        deleteAllButton.setAttribute("type", "button");
-        deleteAllButton.setAttribute("class", "btn btn-default");
-        deleteAllButton.setAttribute("id", "deleteAllButton");
-        var delAllText = document.createTextNode("Delete Completed");
-        deleteAllButton.appendChild(delAllText);
-
-        deleteAllButton.onclick = function () {
-
-            todos.forEach(function(todo) {
-                if (todo.isComplete === "true") {
-                    var url = "/api/todo/" + todo.id;
-                    createReq("DELETE", url, "", "Failed to delete item.");
-                    reloadTodoList();
-                }
-            });
-        };
-
-        todoList.appendChild(deleteAllButton);
+    deleteAllButton.onclick = function () {
 
         todos.forEach(function(todo) {
+            if (todo.isComplete === "true") {
+                var url = "/api/todo/" + todo.id;
+                createReq("DELETE", url, "", "Failed to delete item.");
+                reloadTodoList();
+            }
+        });
+    };
 
-            totalItems += 1 ;
-            if (todo.isComplete === "false") {
-                leftItems += 1 ;
+    todoList.appendChild(deleteAllButton);
+
+    todos.forEach(function(todo) {
+
+        totalItems += 1 ;
+        if (todo.isComplete === "false") {
+            leftItems += 1 ;
+        }
+
+        var first = (todo.isComplete === "true" && !activeTab.includes("Active"));
+        var second = (todo.isComplete === "false" && !activeTab.includes("Completed"));
+        if (first || second) {
+
+            var row = document.createElement("li");
+            row.setAttribute("class", "list-group-item");
+            row.setAttribute("style", "margin: 10px");
+
+            var deleteButton = createIconButton("deleteButton", "glyphicon glyphicon-remove");
+            deleteButton.setAttribute("style", "right: 1%; position: absolute");
+            
+            var updateButton = createIconButton("updateButton", "glyphicon glyphicon-pencil");
+            updateButton.setAttribute("style", "right: 5%; position: absolute");
+
+            var updButton = createIconButton("doneButton", "glyphicon glyphicon-ok");
+            updButton.setAttribute("style", "right: 5%; position: absolute");
+
+            var listItem = document.createElement("div");
+                        
+            var item = document.createElement("div");
+            item.textContent = todo.title;
+            item.setAttribute("id", "item");
+                        
+            var complete = document.createElement("button");
+            complete.setAttribute("class", "btn btn-default");
+            var tick = document.createElement("input");
+            tick.setAttribute("type", "checkbox");
+            tick.setAttribute("id", "tick");
+
+            if (todo.isComplete==="true") {
+                item.setAttribute("style", "display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px");
+                tick.setAttribute("checked", "true");
+            } else {
+                item.setAttribute("style", "display: inline-block;  text-decoration: none; font-style: normal; padding-left: 10px");
+                tick.removeAttribute("checked");
             }
 
-            var first = (todo.isComplete === "true" && !activeTab.includes("Active"));
-            var second = (todo.isComplete === "false" && !activeTab.includes("Completed"));
-            if (first || second) {
+            complete.appendChild(tick);
 
-                var row = document.createElement("li");
-                row.setAttribute("class", "list-group-item");
-                row.setAttribute("style", "margin: 10px");
+            listItem.appendChild(complete);
+            listItem.appendChild(item);
+            listItem.appendChild(deleteButton);
+            listItem.appendChild(updateButton);
+            
+            row.appendChild(listItem);
 
-                var deleteButton = createIconButton("deleteButton", "glyphicon glyphicon-remove");
-                deleteButton.setAttribute("style", "right: 1%; position: absolute");
-                
-                var updateButton = createIconButton("updateButton", "glyphicon glyphicon-pencil");
-                updateButton.setAttribute("style", "right: 5%; position: absolute");
+            deleteButton.onclick = function() {
+                var url = "/api/todo/" + todo.id;
+                createReq("DELETE", url, "", "Failed to delete item.");
+                reloadTodoList();
+            };
 
-                var updButton = createIconButton("doneButton", "glyphicon glyphicon-ok");
-                updButton.setAttribute("style", "right: 5%; position: absolute");
+            updateButton.onclick = function() {
 
-                var listItem = document.createElement("div");
-                            
-                var item = document.createElement("div");
-                item.textContent = todo.title;
-                item.setAttribute("id", "item");
-                            
-                var complete = document.createElement("button");
-                complete.setAttribute("class", "btn btn-default");
-                var tick = document.createElement("input");
-                tick.setAttribute("type", "checkbox");
-                tick.setAttribute("id", "tick");
+                listItem.removeChild(updateButton);
+                listItem.appendChild(updButton);
+                item.setAttribute("contenteditable", "true");
 
-                if (todo.isComplete==="true") {
-                    item.setAttribute("style", "display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px");
-                    tick.setAttribute("checked", "true");
-                } else {
-                    item.setAttribute("style", "display: inline-block;  text-decoration: none; font-style: normal; padding-left: 10px");
-                    tick.removeAttribute("checked");
-                }
+                updButton.onclick = function() {
 
-                complete.appendChild(tick);
-
-                listItem.appendChild(complete);
-                listItem.appendChild(item);
-                listItem.appendChild(deleteButton);
-                listItem.appendChild(updateButton);
-                
-                row.appendChild(listItem);
-
-                deleteButton.onclick = function() {
-                    var url = "/api/todo/" + todo.id;
-                    createReq("DELETE", url, "", "Failed to delete item.");
-                    reloadTodoList();
-                };
-
-                updateButton.onclick = function() {
-
-                    listItem.removeChild(updateButton);
-                    listItem.appendChild(updButton);
-                    item.setAttribute("contenteditable", "true");
-
-                    updButton.onclick = function() {
-
-                        listItem.removeChild(updButton);
-                        listItem.appendChild(updateButton);
-                        item.removeAttribute("contenteditable");
-
-                        var url = "/api/todo/" + todo.id;
-                        var body = JSON.stringify({
-                            title: item.textContent,
-                            isComplete: todo.isComplete,
-                            id : todo.id
-                        });
-                        createReq("PUT", url, body, "Failed to update item.");
-                        reloadTodoList();
-                    };
-                };
-
-                tick.onclick = function () {
-                    var completeValue;
-                    if (todo.isComplete === "true") { completeValue = "false";
-                    } else { completeValue = "true"; }
+                    listItem.removeChild(updButton);
+                    listItem.appendChild(updateButton);
+                    item.removeAttribute("contenteditable");
 
                     var url = "/api/todo/" + todo.id;
                     var body = JSON.stringify({
                         title: item.textContent,
-                        isComplete: completeValue,
+                        isComplete: todo.isComplete,
                         id : todo.id
                     });
-                    createReq("PUT", url, body, "Failed to update item.");  
-                    reloadTodoList();  
+                    createReq("PUT", url, body, "Failed to update item.");
+                    reloadTodoList();
                 };
+            };
 
-                todoList.appendChild(row);
-              }
-            });
+            tick.onclick = function () {
+                var completeValue;
+                if (todo.isComplete === "true") { completeValue = "false";
+                } else { completeValue = "true"; }
+
+                var url = "/api/todo/" + todo.id;
+                var body = JSON.stringify({
+                    title: item.textContent,
+                    isComplete: completeValue,
+                    id : todo.id
+                });
+                createReq("PUT", url, body, "Failed to update item.");  
+                reloadTodoList();  
+            };
+
+            todoList.appendChild(row);
+        }
+    });
 
     itemsLeft.textContent = "You have " + leftItems.toString();
     itemsLeft.textContent += " items left to complete out of " + totalItems.toString();
 
-    });
+}
 
+function reloadTodoList() {
+    
+    clearTodoList();
+
+    fetch( "/api/todo")
+        .then(function(res) {
+            if (res.status !== 200) {
+                error.textContent = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
+                return;
+            } else {
+                res.json().then(function(data) {  
+                    createTodoList(data); 
+                });
+            }
+        })
+        .catch(function(res){
+            error.textContent = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
+        });
 }
 
 reloadTodoList();
