@@ -1,7 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var _ = require("underscore");
-var fetch = require('node-fetch');
+var fetch = require('whatwg-fetch');
 
 module.exports = function(port, middleware, callback) {
     var app = express();
