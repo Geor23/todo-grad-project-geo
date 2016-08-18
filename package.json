@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/joebandenburg/todo-grad-project",
   "devDependencies": {
+    "angular": "^1.5.8",
     "chai": "^2.3.0",
     "chromedriver": "^2.23.0",
     "grunt": "^0.4.5",

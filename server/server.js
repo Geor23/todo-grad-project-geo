@@ -51,7 +51,6 @@ module.exports = function(port, middleware, callback) {
         if (todo) {
             todo.title = newtitle;
             todo.isComplete = req.body.isComplete;
-            console.log(todo);
             res.sendStatus(200);
         } else {
             res.sendStatus(404);

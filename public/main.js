@@ -1,10 +1,12 @@
-var app = angular.module('TodoApp', []);
-app.controller('mainController', ['$scope', function($scope) {
+/*global angular */
 
-    $scope.todos;
-    $scope.todoText;
-    $scope.error;
-    $scope.textInput;
+var app = angular.module("TodoApp", []);
+app.controller("mainController", ["$scope", function($scope) {
+
+    $scope.todos = [];
+    $scope.todoText = "";
+    $scope.error = "";
+    $scope.textInput = "";
     $scope.itemsLeft = 0;
     $scope.totalItems = 0;
     $scope.updating = false;
@@ -20,12 +22,12 @@ app.controller('mainController', ['$scope', function($scope) {
         });
         $scope.createReq("POST", "/api/todo", body, "Failed to create item.");
         $scope.todoText = "";
-    }
+    };
 
     $scope.deleteTodo = function(id) {
         var url = "/api/todo/" + id;
         $scope.createReq("DELETE", url, "", "Failed to delete item.");
-    }
+    };
 
     $scope.deleteAllCompleted = function() {
         $scope.todos.forEach(function(todo) {
@@ -34,7 +36,7 @@ app.controller('mainController', ['$scope', function($scope) {
                 $scope.createReq("DELETE", url, "", "Failed to delete item.");
             }
         });
-    }
+    };
 
     $scope.updateTodo = function(id, complete, text) {
         var url = "/api/todo/" + id;
@@ -44,10 +46,12 @@ app.controller('mainController', ['$scope', function($scope) {
             id : id
         });
         $scope.createReq("PUT", url, body, "Failed to update item.");
-    }
+    };
 
 
     $scope.getTodoList = function() {
+        $scope.totalItems = 0;
+        $scope.itemsLeft = 0;
         fetch( "/api/todo")
             .then(function(res) {
                 if (res.status !== 200) {
@@ -69,7 +73,7 @@ app.controller('mainController', ['$scope', function($scope) {
             .catch(function(res){
                 $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
             });
-    }
+    };
 
     $scope.createReq = function (method, url, body, errorMsg){
         fetch( url, {
@@ -80,16 +84,17 @@ app.controller('mainController', ['$scope', function($scope) {
             body: body
         })
         . then(function(res) {
-            console.log(res);
+
+            $scope.error = res;
             if (res.status !== 200) {
-                $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;
-                $scope.getTodoList();
+                $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;   
             }
+            $scope.getTodoList();
         })
         .catch(function(res){
             $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;
         });
-    }
+    };
 
     
 
