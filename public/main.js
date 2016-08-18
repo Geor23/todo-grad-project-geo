@@ -48,14 +48,12 @@ app.controller('mainController', ['$scope', function($scope) {
     }
 
     $scope.completeTodo = function (id, complete, title) {
-        console.log(complete);
         var url = "/api/todo/" + id;
         var body = JSON.stringify({
             title: title,
             isComplete: complete,
             id : id
         });
-        console.log(body);
         $scope.createReq("PUT", url, body, "Failed to update item.");
     }
 
@@ -73,7 +71,7 @@ app.controller('mainController', ['$scope', function($scope) {
                         $scope.todos.forEach(function(todo) {
                             $scope.totalItems += 1 ;
                             if (todo.isComplete === false) {
-                                $scope.leftItems += 1 ;
+                                $scope.itemsLeft += 1 ;
                             }
                         });
                     });
