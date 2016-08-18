@@ -16,7 +16,10 @@
     <body ng-controller="mainController as todoList" class="dark-blue-background">
         
         <header>
-            <button id="deleteAllButton" type="button" class="btn btn-default create" ng-click="deleteAllCompleted()">Delete Completed</button>
+            <div class="header-right">
+                <div id="deleteAllButton" class="button-header" ng-click="deleteAllCompleted()">Delete Completed</div>
+                <div class="button-header" ng-click="change-background()">Change Background</div>
+            </div>
             <h1 class="pacifico">TODO List</h1>
         </header>
 
@@ -28,9 +31,9 @@
             <div id="count-label" class="info"><i>You have {{itemsLeft}} items left out of {{totalItems}}</i></div>
             
             <ul class="tabs nav-stacked list-group left" id="tabs">
-              <li role="presentation" class="active" style="width:31px"data-toggle="tab" ng-click="activeTab='All'"><a style="line-height: 31px;">All</a></li>
-              <li role="presentation" style="width:31px" data-toggle="tab" ng-click="activeTab='Active'"><a style="line-height: 31px;">Active</a></li>
-              <li role="presentation" style="width:31px" data-toggle="tab" ng-click="activeTab='Completed'"><a style="line-height: 31px;">Completed</a></li>
+              <li role="presentation" class="active" data-toggle="tab" ng-click="activeTab='All'"><a>All</a></li>
+              <li role="presentation" data-toggle="tab" ng-click="activeTab='Active'"><a>Active</a></li>
+              <li role="presentation" data-toggle="tab" ng-click="activeTab='Completed'"><a>Completed</a></li>
             </ul>
 
             <div class="list-group margin">
