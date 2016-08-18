@@ -4,7 +4,7 @@ app.controller('mainController', ['$scope', function($scope) {
     $scope.todos;
     $scope.todoText;
     $scope.error;
-    $scope.text;
+    $scope.textInput;
     $scope.itemsLeft = 0;
     $scope.totalItems = 0;
     $scope.updating = false;
@@ -35,11 +35,10 @@ app.controller('mainController', ['$scope', function($scope) {
         });
     }
 
-    $scope.updateTodo = function(id, complete) {
-        console.log($scope.text);
+    $scope.updateTodo = function(id, complete, text) {
         var url = "/api/todo/" + id;
         var body = JSON.stringify({
-            title: $scope.text,
+            title: text,
             isComplete: complete,
             id : id
         });
