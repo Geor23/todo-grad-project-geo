@@ -48,8 +48,14 @@ module.exports = function(port, middleware, callback) {
         var id = req.params.id;
         var newtitle = req.body.title;
         var todo = getTodo(id);
-        todo.title = newtitle;
-        res.sendStatus(200);
+        if (todo) {
+            todo.title = newtitle;
+            todo.isComplete = req.body.isComplete;
+            console.log(todo);
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
     });
 
     function getTodo(id) {

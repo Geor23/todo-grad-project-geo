@@ -1,9 +1,10 @@
 var app = angular.module('TodoApp', []);
-app.controller('mainController', function($scope) {
+app.controller('mainController', ['$scope', function($scope) {
 
     $scope.todos;
     $scope.todoText;
     $scope.error;
+    $scope.text;
     $scope.itemsLeft = 0;
     $scope.totalItems = 0;
     $scope.updating = false;
@@ -14,39 +15,50 @@ app.controller('mainController', function($scope) {
         console.log(title);
         var body= JSON.stringify({
             title: title,
-            isComplete: "false"
+            isComplete: false
         });
         $scope.createReq("POST", "/api/todo", body, "Failed to create item.");
-        $scope.getTodoList();
         $scope.todoText = "";
     }
 
     $scope.deleteTodo = function(id) {
         var url = "/api/todo/" + id;
         $scope.createReq("DELETE", url, "", "Failed to delete item.");
-        $scope.getTodoList();
     }
 
     $scope.deleteAllCompleted = function() {
         $scope.todos.forEach(function(todo) {
-            if (todo.isComplete === "true") {
+            if (todo.isComplete === true) {
                 var url = "/api/todo/" + todo.id;
                 $scope.createReq("DELETE", url, "", "Failed to delete item.");
-                $scope.getTodoList();
             }
         });
     }
 
     $scope.updateTodo = function(id, complete) {
+        console.log($scope.text);
         var url = "/api/todo/" + id;
         var body = JSON.stringify({
-            title: $scope.todoText,
+            title: $scope.text,
             isComplete: complete,
             id : id
         });
+        console.log(body);
         $scope.createReq("PUT", url, body, "Failed to update item.");
-        $scope.getTodoList();
     }
+
+    $scope.completeTodo = function (id, complete, title) {
+        console.log(complete);
+        var url = "/api/todo/" + id;
+        var body = JSON.stringify({
+            title: title,
+            isComplete: complete,
+            id : id
+        });
+        console.log(body);
+        $scope.createReq("PUT", url, body, "Failed to update item.");
+    }
+
 
     $scope.getTodoList = function() {
         fetch( "/api/todo")
@@ -60,7 +72,7 @@ app.controller('mainController', function($scope) {
                         $scope.todos = data;
                         $scope.todos.forEach(function(todo) {
                             $scope.totalItems += 1 ;
-                            if (todo.isComplete === "false") {
+                            if (todo.isComplete === false) {
                                 $scope.leftItems += 1 ;
                             }
                         });
@@ -81,8 +93,10 @@ app.controller('mainController', function($scope) {
             body: body
         })
         . then(function(res) {
+            console.log(res);
             if (res.status !== 200) {
-               $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;
+                $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;
+                $scope.getTodoList();
             }
         })
         .catch(function(res){
@@ -90,74 +104,10 @@ app.controller('mainController', function($scope) {
         });
     }
 
-    $scope.getTodoList();
+    
 
-});
+}]);
 
 // ng-if="{{(todo.isComplete === 'true' && !activeTab.includes('Active'))||(todo.isComplete === 'false' && !activeTab.includes('Completed'))}}"
-
-// tabs.onclick = function () {
-//     reloadTodoList();
-// };
-
-// function createTodoList(todos) {
-
-//     var activeTab = document.getElementsByClassName("active")[0].innerText;
-
-//     todos.forEach(function(todo) {
-
-//         totalItems += 1 ;
-//         if (todo.isComplete === "false") {
-//             leftItems += 1 ;
-//         }
-
-
-//             updateButton.onclick = function() {
-
-//                 listItem.removeChild(updateButton);
-//                 listItem.appendChild(updButton);
-//                 item.setAttribute("contenteditable", "true");
-
-//                 updButton.onclick = function() {
-
-//                     listItem.removeChild(updButton);
-//                     listItem.appendChild(updateButton);
-//                     item.removeAttribute("contenteditable");
-
-//                     var url = "/api/todo/" + todo.id;
-//                     var body = JSON.stringify({
-//                         title: item.textContent,
-//                         isComplete: todo.isComplete,
-//                         id : todo.id
-//                     });
-//                     createReq("PUT", url, body, "Failed to update item.");
-//                     reloadTodoList();
-//                 };
-//             };
-
-//             tick.onclick = function () {
-//                 var completeValue;
-//                 if (todo.isComplete === "true") { completeValue = "false";
-//                 } else { completeValue = "true"; }
-
-//                 var url = "/api/todo/" + todo.id;
-//                 var body = JSON.stringify({
-//                     title: item.textContent,
-//                     isComplete: completeValue,
-//                     id : todo.id
-//                 });
-//                 createReq("PUT", url, body, "Failed to update item.");  
-//                 reloadTodoList();  
-//             };
-
-//             todoList.appendChild(row);
-//         }
-//     });
-
-//     itemsLeft.textContent = "You have " + leftItems.toString();
-//     itemsLeft.textContent += " items left to complete out of " + totalItems.toString();
-
-// }
-
 
 

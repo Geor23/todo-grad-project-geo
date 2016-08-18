@@ -17,7 +17,6 @@
         <section>
             <h2 id="count-label">You have {{itemsLeft}} items left out of {{totalItems}}</h2>
             <button id="deleteAllButton" type="button" class="btn btn-default" ng-click="deleteAllCompleted()">Delete Completed</button>
-            <h2 id="todo-list-placeholder">Loading...</h2>
             <ul class="nav nav-tabs" id="tabs">
               <li role="presentation" class="active" data-toggle="tab"><a>All</a></li>
               <li role="presentation" data-toggle="tab"><a>Active</a></li>
@@ -26,8 +25,8 @@
             <ul id="todo-list" class="list-group" ng-init="getTodoList()">
                 <li ng-repeat="todo in todos" class="list-group-item" style="margin:10px">
                     <div>
-                        <button type="button" class="btn btn-default" ng-click="completeTodo()">
-                            <input type="checkbox" id="tick" checked="todo.isComplete">
+                        <button type="button" class="btn btn-default" ng-click="completeTodo(todo.id, todo.isComplete, todo.title)">
+                            <input type="checkbox" id="tick" ng-model="todo.isComplete">
                             </input>
                         </button> 
                         <div id="item" ng-if="!todo.isComplete&&!updating" style="display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px">
@@ -36,8 +35,8 @@
                         <div id="item" ng-if="todo.isComplete&&!updating" style="display: inline-block; padding-left: 10px">
                             {{todo.title}}
                         </div>
-                        <div id="item" ng-if="updating" style="display: inline-block; padding-left: 10px" contenteditable="true" ng-bind="todoText" ng-init="todoText=todo.title">
-                        </div>
+                        <input id="item" ng-if="updating" style="display: inline-block; padding-left: 10px" ng-model="text" ng-init="text=todo.title">
+                        </input>
                         <button id="deleteButton" type="button" class="btn btn-default" ng-click="deleteTodo(todo.id)" style="right: 1%; position: absolute">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true">
                             </span>
