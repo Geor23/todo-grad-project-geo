@@ -179,8 +179,12 @@ h1 {
     display: block;
     padding: 10px 15px;
     margin-bottom: -1px;
-    border: 1px solid #ddd;
+    border: 1px solid black;
     margin:10px;
+}
+
+input:focus {
+    outline:none;
 }
 
 .create-element {
@@ -189,7 +193,7 @@ h1 {
     padding: 10px 15px;
     margin-bottom: -1px;
     margin-top: 50px;
-    border: 5px solid #312f2f;
+    border: 2px solid black;
 }
 
 .right-box {
@@ -216,8 +220,8 @@ h1 {
 }
 
 .footer {
-    position: fixed;
-    bottom: 5%;
+    position: absolute;
+    bottom: 0px;
     z-index: 10;
     text-align: center;
     color: white;
@@ -237,13 +241,13 @@ h1 {
 .box {
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 550px;
     height: 500px;
     margin-top: -250px;
     overflow-y: auto;
     width: 800px;
     margin-left: -400px;
-    border: 1px solid white;
+    border: 1px solid black;
 }
 
 .create-box {
