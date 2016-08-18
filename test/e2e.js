@@ -84,7 +84,7 @@ testing.describe("end to end", function() {
             helpers.addTodo("N");
             var text = helpers.updateTodo();
             text.then(function(text) {
-                assert.equal(text, "uN");
+                assert.equal(text, "Nu");
             });
         });
     });
