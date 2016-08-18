@@ -8,6 +8,7 @@ app.controller('mainController', ['$scope', function($scope) {
     $scope.itemsLeft = 0;
     $scope.totalItems = 0;
     $scope.updating = false;
+    $scope.activeTab = "All";
 
 
     $scope.addTodo = function() {
@@ -42,17 +43,6 @@ app.controller('mainController', ['$scope', function($scope) {
             isComplete: complete,
             id : id
         });
-        console.log(body);
-        $scope.createReq("PUT", url, body, "Failed to update item.");
-    }
-
-    $scope.completeTodo = function (id, complete, title) {
-        var url = "/api/todo/" + id;
-        var body = JSON.stringify({
-            title: title,
-            isComplete: complete,
-            id : id
-        });
         $scope.createReq("PUT", url, body, "Failed to update item.");
     }
 
@@ -65,7 +55,6 @@ app.controller('mainController', ['$scope', function($scope) {
                     return;
                 } else {
                     res.json().then(function(data) {
-                        console.log(data);
                         $scope.todos = data;
                         $scope.todos.forEach(function(todo) {
                             $scope.totalItems += 1 ;
@@ -104,7 +93,4 @@ app.controller('mainController', ['$scope', function($scope) {
     
 
 }]);
-
-// ng-if="{{(todo.isComplete === 'true' && !activeTab.includes('Active'))||(todo.isComplete === 'false' && !activeTab.includes('Completed'))}}"
-
 

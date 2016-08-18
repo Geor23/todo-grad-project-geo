@@ -18,14 +18,14 @@
             <h2 id="count-label">You have {{itemsLeft}} items left out of {{totalItems}}</h2>
             <button id="deleteAllButton" type="button" class="btn btn-default" ng-click="deleteAllCompleted()">Delete Completed</button>
             <ul class="nav nav-tabs" id="tabs">
-              <li role="presentation" class="active" data-toggle="tab"><a>All</a></li>
-              <li role="presentation" data-toggle="tab"><a>Active</a></li>
-              <li role="presentation" data-toggle="tab"><a>Completed</a></li>
+              <li role="presentation" class="active" data-toggle="tab" ng-click="activeTab='All'"><a>All</a></li>
+              <li role="presentation" data-toggle="tab" ng-click="activeTab='Active'"><a>Active</a></li>
+              <li role="presentation" data-toggle="tab" ng-click="activeTab='Completed'"><a>Completed</a></li>
             </ul>
             <ul id="todo-list" class="list-group" ng-init="getTodoList()">
-                <li ng-repeat="todo in todos" class="list-group-item" style="margin:10px">
+                <li ng-repeat="todo in todos track by $index" class="list-group-item" style="margin:10px" ng-if="(todo.isComplete === true && !activeTab.includes('Active'))||(todo.isComplete === false && !activeTab.includes('Completed'))">
                     <div>
-                        <button type="button" class="btn btn-default" ng-click="completeTodo(todo.id, todo.isComplete, todo.title)">
+                        <button type="button" class="btn btn-default" ng-click="updateTodo(todo.id, todo.isComplete, todo.title)">
                             <input type="checkbox" id="tick" ng-model="todo.isComplete">
                             </input>
                         </button> 
