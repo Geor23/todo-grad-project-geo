@@ -174,16 +174,6 @@ h1 {
     font-family: 'Poiret One', cursive;
 }
 
-.delete-button {
-    right: 1%; 
-    position: absolute;
-}
-
-.update-button {
-    right: 5%; 
-    position: absolute;
-}
-
 .item-element {
     position: relative;
     display: block;
@@ -202,9 +192,10 @@ h1 {
     border: 5px solid #312f2f;
 }
 
-.header-right {
+.right-box {
     position: absolute;
     right: 5px;
+    display: inline-block; 
 }
 
 .button-header {
@@ -225,7 +216,7 @@ h1 {
 }
 
 .footer {
-    position: absolute;
+    position: fixed;
     bottom: 5%;
     z-index: 10;
     text-align: center;
@@ -238,5 +229,28 @@ h1 {
     text-transform: uppercase;
     font-weight: 200;
     letter-spacing: 5px;
-    right: 42%;
+    right: 50%;
+    width: 300px;
+    margin-left: -150px;
+}
+
+.box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 500px;
+    margin-top: -250px;
+    overflow-y: auto;
+    width: 800px;
+    margin-left: -400px;
+    border: 1px solid white;
+}
+
+.create-box {
+    position: absolute;
+    left: 50%;
+    margin-top: 0px;
+    overflow-y: auto;
+    width: 900px;
+    margin-left: -450px;
 }

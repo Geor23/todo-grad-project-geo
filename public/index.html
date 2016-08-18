@@ -16,7 +16,7 @@
     <body ng-controller="mainController as todoList" class="dark-blue-background">
         
         <header>
-            <div class="header-right">
+            <div class="right-box">
                 <div id="deleteAllButton" class="button-header" ng-click="deleteAllCompleted()">Delete Completed</div>
                 <div class="button-header" ng-click="change-background()">Change Background</div>
             </div>
@@ -27,21 +27,25 @@
             <div class="separator line-separator">∎</div>
         </div>
 
-        <section class="dark-blue-background">
-            <div id="count-label" class="info"><i>You have {{itemsLeft}} items left out of {{totalItems}}</i></div>
-            
-            <ul class="tabs nav-stacked list-group left" id="tabs">
-              <li role="presentation" class="active" data-toggle="tab" ng-click="activeTab='All'"><a>All</a></li>
-              <li role="presentation" data-toggle="tab" ng-click="activeTab='Active'"><a>Active</a></li>
-              <li role="presentation" data-toggle="tab" ng-click="activeTab='Completed'"><a>Completed</a></li>
-            </ul>
+        <div id="count-label" class="info"><i>You have {{itemsLeft}} items left out of {{totalItems}}</i>
+        </div>
 
-            <div class="list-group margin">
-                <form id="todo-form" class="create-element grey-background no-border" ng-submit="addTodo()">
-                    <input id="new-todo" class="incomplete-item grey-background" placeholder="What needs to be done?" style="width: 80%" ng-model="todoText" autofocus>
-                    <input id="submit-todo" type="submit" class="btn btn-default create" value="Create">
-                </form>
-            </div>
+        <ul class="tabs nav-stacked list-group left" id="tabs">
+          <li role="presentation" class="active" data-toggle="tab" ng-click="activeTab='All'"><a>All</a></li>
+          <li role="presentation" data-toggle="tab" ng-click="activeTab='Active'"><a>Active</a></li>
+          <li role="presentation" data-toggle="tab" ng-click="activeTab='Completed'"><a>Completed</a></li>
+        </ul>
+
+        <div class="list-group margin create-box">
+            <form id="todo-form" class="create-element grey-background no-border" ng-submit="addTodo()">
+                <input id="new-todo" class="incomplete-item grey-background" placeholder="What needs to be done?" style="width: 80%" ng-model="todoText" autofocus>
+                <input id="submit-todo" type="submit" class="btn btn-default create" value="Create">
+            </form>
+        </div>
+
+        <section class="dark-blue-background box">
+        
+
 
             <ul id="todo-list" class="list-group margin" ng-init="getTodoList()">   
                 <li ng-repeat="todo in todos track by $index" class="item-element grey-background" ng-if="(todo.isComplete === true && !activeTab.includes('Active'))||(todo.isComplete === false && !activeTab.includes('Completed'))">
@@ -62,18 +66,19 @@
                         <input type="text" id="item" ng-if="updating" class="incomplete-item grey-background" ng-model="todo.title" >
                         </input>
 
-                        <button id="deleteButton" type="button" class="btn btn-default delete-button" ng-click="deleteTodo(todo.id)">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                        </button>
+                        <div class="right-box">
+                            <button id="deleteButton" type="button" class="btn btn-default" ng-click="deleteTodo(todo.id)">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
 
-                        <button id="updateButton" type="button" class="btn btn-default update-button" ng-hide="updating" ng-click="updating=true">
-                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                        </button>
+                            <button id="updateButton" type="button" class="btn btn-default" ng-hide="updating" ng-click="updating=true">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                            </button>
 
-                        <button id="doneButton" type="button" class="btn btn-default update-button" ng-show="updating" ng-click="updateTodo(todo.id, todo.isComplete, todo.title); updating = false;">
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                        </button>
-
+                            <button id="doneButton" type="button" class="btn btn-default" ng-show="updating" ng-click="updateTodo(todo.id, todo.isComplete, todo.title); updating = false;">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            </button>
+                        </div>
                     </div>
                 </li>
             </ul>
