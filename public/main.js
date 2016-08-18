@@ -84,9 +84,7 @@ app.controller("mainController", ["$scope", function($scope) {
             body: body
         })
         . then(function(res) {
-
-            $scope.error = res;
-            if (res.status !== 200) {
+            if (res.status !== 200 && res.status !== 201) {
                 $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;   
             }
             $scope.getTodoList();

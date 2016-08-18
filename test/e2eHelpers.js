@@ -77,7 +77,7 @@ module.exports.getErrorText = function() {
 module.exports.getTodoList = function() {
     var todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list"));
     driver.wait(webdriver.until.elementIsVisible(todoListPlaceholder), 5000);
-    return driver.findElements(webdriver.By.css("#todo-list"));
+    return driver.findElements(webdriver.By.css("#todo-list li"));
 };
 
 module.exports.addTodo = function(text) {
