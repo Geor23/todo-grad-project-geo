@@ -29,10 +29,10 @@
                             <input type="checkbox" id="tick" ng-model="todo.isComplete">
                             </input>
                         </button> 
-                        <div id="item" ng-if="!todo.isComplete&&!updating" style="display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px">
+                        <div id="item" ng-if="todo.isComplete&&!updating" style="display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px">
                             {{todo.title}}
                         </div>
-                        <div id="item" ng-if="todo.isComplete&&!updating" style="display: inline-block; padding-left: 10px">
+                        <div id="item" ng-if="!todo.isComplete&&!updating" style="display: inline-block; padding-left: 10px">
                             {{todo.title}}
                         </div>
                         <input id="item" ng-if="updating" style="display: inline-block; padding-left: 10px" ng-model="text" ng-init="text=todo.title">
