@@ -24,38 +24,42 @@
               <li role="presentation" data-toggle="tab" ng-click="activeTab='Completed'"><a>Completed</a></li>
             </ul>
             <ul id="todo-list" class="list-group" ng-init="getTodoList()">
-                <li ng-repeat="todo in todos track by $index" class="list-group-item" style="margin:10px" ng-if="(todo.isComplete === true && !activeTab.includes('Active'))||(todo.isComplete === false && !activeTab.includes('Completed'))">
+                <li ng-repeat="todo in todos track by $index" class="list-group-item item-element" ng-if="(todo.isComplete === true && !activeTab.includes('Active'))||(todo.isComplete === false && !activeTab.includes('Completed'))">
                     <div>
                         <button type="button" class="btn btn-default" ng-click="updateTodo(todo.id, todo.isComplete, todo.title)">
                             <input type="checkbox" id="tick" ng-model="todo.isComplete">
                             </input>
                         </button> 
-                        <div id="item" ng-if="todo.isComplete&&!updating" style="display: inline-block;  text-decoration: line-through; font-style: italic; padding-left: 10px">
+
+                        <div id="item" ng-if="todo.isComplete&&!updating" class="complete-item">
                             {{todo.title}}
                         </div>
-                        <div id="item" ng-if="!todo.isComplete&&!updating" style="display: inline-block; padding-left: 10px">
+
+                        <div id="item" ng-if="!todo.isComplete&&!updating" class="incomplete-item">
                             {{todo.title}}
                         </div>
-                        <input type="text" id="item" ng-if="updating" style="display: inline-block; padding-left: 10px" ng-model="todo.title" >
+
+                        <input type="text" id="item" ng-if="updating" class="incomplete-item" ng-model="todo.title" >
                         </input>
-                        <button id="deleteButton" type="button" class="btn btn-default" ng-click="deleteTodo(todo.id)" style="right: 1%; position: absolute">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true">
-                            </span>
+
+                        <button id="deleteButton" type="button" class="btn btn-default delete-button" ng-click="deleteTodo(todo.id)">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </button>
-                        <button id="updateButton" type="button" class="btn btn-default" ng-hide="updating" ng-click="updating=true" style="right: 5%; position: absolute">
-                            <span class="glyphicon glyphicon-pencil" aria-hidden="true">
-                            </span>
+
+                        <button id="updateButton" type="button" class="btn btn-default update-button" ng-hide="updating" ng-click="updating=true">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                         </button>
-                        <button id="doneButton" type="button" class="btn btn-default" ng-show="updating" ng-click="updateTodo(todo.id, todo.isComplete, todo.title); updating = false;" style="right: 5%; position: absolute">
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true">
-                            </span>
+
+                        <button id="doneButton" type="button" class="btn btn-default update-button" ng-show="updating" ng-click="updateTodo(todo.id, todo.isComplete, todo.title); updating = false;">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         </button>
+
                     </div>
                 </li>
             </ul>
             <form id="todo-form" ng-submit="addTodo()">
                 <input id="new-todo" placeholder="What needs to be done?" ng-model="todoText" autofocus>
-                <input id="submit-todo" type="submit" value="Create">
+                <input id="submit-todo" type="submit" class="btn btn-default" value="Create">
             </form>
             <div id="error" ng-model="error">{{error}}</div>
         </section>

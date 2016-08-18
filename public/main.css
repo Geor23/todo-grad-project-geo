@@ -23,3 +23,29 @@ h1 {
     line-height: 34px;
     color: rgba(255, 255, 255, 0.87);
 }
+
+.incomplete-item {
+    display: inline-block; 
+    padding-left: 10px;
+}
+
+.complete-item {
+    display: inline-block;  
+    text-decoration: line-through; 
+    font-style: italic; 
+    padding-left: 10px;
+}
+
+.delete-button {
+    right: 1%; 
+    position: absolute;
+}
+
+.update-button {
+    right: 5%; 
+    position: absolute;
+}
+
+.item-element {
+    margin:10px;
+}
