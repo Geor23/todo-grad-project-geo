@@ -84,6 +84,7 @@ app.controller("mainController", ["$scope", function($scope) {
             body: body
         })
         . then(function(res) {
+            console.log(res.responseText);
             if (res.status !== 200 && res.status !== 201) {
                 $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;   
             }
