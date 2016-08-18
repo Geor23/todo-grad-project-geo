@@ -62,6 +62,7 @@ app.controller('mainController', ['$scope', function($scope) {
                                 $scope.itemsLeft += 1 ;
                             }
                         });
+                        $scope.$apply();
                     });
                 }
             })
