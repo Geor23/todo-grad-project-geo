@@ -1,8 +1,10 @@
 module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-jshint");
+    grunt.loadNpmTasks("grunt-contrib-connect");
     grunt.loadNpmTasks("grunt-jscs");
     grunt.loadNpmTasks("grunt-mocha-test");
     grunt.loadNpmTasks("grunt-mocha-istanbul");
+
 
     var testOutputLocation = process.env.CIRCLE_TEST_REPORTS || "test_output";
     var artifactsLocation = "build_artifacts";
@@ -22,6 +24,15 @@ module.exports = function(grunt) {
                 fix: true, // Autofix code style violations when possible.
                 requireCurlyBraces: [ "if" ]
             }
+        },
+
+        "connect": {
+          options: {
+            port: process.env.PORT || 8080,
+            base: 'dist/',
+          },
+
+          all: {},
         },
         mochaTest: {
             test: {
@@ -100,4 +111,5 @@ module.exports = function(grunt) {
     grunt.registerTask("ci-test", ["check", "mochaTest:ci", "mocha_istanbul:ci", "istanbul_report",
         "istanbul_check_coverage"]);
     grunt.registerTask("default", "test");
+    grunt.registerTask("serve", "connect");
 };

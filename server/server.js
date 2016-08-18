@@ -1,6 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var _ = require("underscore");
+var fetch = require('whatwg-fetch');
 
 module.exports = function(port, middleware, callback) {
     var app = express();
@@ -46,9 +47,8 @@ module.exports = function(port, middleware, callback) {
     //Update
     app.put("/api/todo/:id", function(req, res) {
         var id = req.params.id;
-        var newtitle = req.body.title;
         var todo = getTodo(id);
-        todo.title = newtitle;
+        todo.title = req.body.title;
         todo.isComplete = req.body.isComplete;
         res.sendStatus(200);
     });

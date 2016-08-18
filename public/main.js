@@ -1,3 +1,4 @@
+
 /*global angular */
 
 var app = angular.module("TodoApp", []);
@@ -48,7 +49,6 @@ app.controller("mainController", ["$scope", function($scope) {
         $scope.createReq("PUT", url, body, "Failed to update item.");
     };
 
-
     $scope.getTodoList = function() {
         $scope.totalItems = 0;
         $scope.itemsLeft = 0;
@@ -94,8 +94,6 @@ app.controller("mainController", ["$scope", function($scope) {
             $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;
         });
     };
-
-    
 
 }]);
 
