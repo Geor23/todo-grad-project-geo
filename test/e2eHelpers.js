@@ -132,8 +132,10 @@ module.exports.markTodoAsComplete = function() {
 };
 
 module.exports.markTodoAsIncomplete = function() {
-    driver.findElement(webdriver.By.id("tick")).click();
     var todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list"));
+    driver.wait(webdriver.until.elementIsVisible(todoListPlaceholder), 5000);
+    driver.findElement(webdriver.By.id("tick")).click();
+    todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list"));
     driver.wait(webdriver.until.elementIsVisible(todoListPlaceholder), 5000);
     driver.findElement(webdriver.By.id("tick")).click();
     todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list"));
