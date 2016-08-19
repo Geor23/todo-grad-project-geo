@@ -1,7 +1,7 @@
 
 /*global angular */
 
-var app = angular.module("TodoApp", [ 'ngDialog']);
+var app = angular.module("TodoApp", [ 'ngDialog', 'colorpicker.module']);
 app.controller("mainController", ["$scope", 'ngDialog', function($scope, ngDialog) {
 
     $scope.todos = [];
@@ -12,6 +12,7 @@ app.controller("mainController", ["$scope", 'ngDialog', function($scope, ngDialo
     $scope.totalItems = 0;
     $scope.updating = false;
     $scope.activeTab = "All";
+    $scope.background;
 
     $scope.openBackgroundDialog = function() {
         ngDialog.open({ 
