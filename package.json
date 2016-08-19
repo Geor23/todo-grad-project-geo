@@ -37,6 +37,7 @@
     "selenium-webdriver": "^2.45.1"
   },
   "dependencies": {
+    "angular-bootstrap-colorpicker": "^3.0.25",
     "body-parser": "^1.12.4",
     "express": "^4.12.4",
     "underscore": "^1.8.3",
