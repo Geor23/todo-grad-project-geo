@@ -105,7 +105,18 @@ h1 {
 
 }
 
-
+.box::-webkit-scrollbar {
+    width: 1em;
+}
+ 
+.box::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px black;
+}
+ 
+.box::-webkit-scrollbar-thumb {
+  background-color: #807979;
+  outline: 1px solid #807979;
+}
 
 .separator-container {
   text-align: center;
@@ -135,6 +146,10 @@ h1 {
 
 .margin {
     margin: 50px;
+}
+
+.margin-small {
+    margin: 10px;
 }
 
 .info {
