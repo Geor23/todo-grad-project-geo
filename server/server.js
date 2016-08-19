@@ -47,11 +47,9 @@ module.exports = function(port, middleware, callback) {
     //Update
     app.put("/api/todo/:id", function(req, res) {
         var id = req.params.id;
-        var newtitle = req.body.title;
-        var newcomplete = req.body.isComplete;
         var todo = getTodo(id);
-        todo.title = newtitle;
-        todo.isComplete = newcomplete;
+        todo.title = req.body.title;
+        todo.isComplete = req.body.isComplete;
         res.sendStatus(200);
     });
 

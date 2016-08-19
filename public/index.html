@@ -1,33 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="TodoApp">
     <head>
         <meta charset="utf-8">
-        <title>TODO List</title>
+        <title class="pacifico">TODO List</title>
         <link href="main.css" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+        <script type="text/javascript" src="main.js"></script>
         <link rel="icon" type="image/ico" href="favicon.ico">
     </head>
-    <body>
+    <body ng-controller="mainController as todoList" class="dark-blue-background">
+        
         <header>
-            <h1>TODO List</h1>
+            <div class="right-box">
+                <div id="deleteAllButton" class="button-header" ng-click="deleteAllCompleted()">Delete Completed</div>
+                <div class="button-header" ng-click="change-background()">Change Background</div>
+            </div>
+            <h1 class="pacifico">TODO List</h1>
         </header>
-        <section>
-            <div id="count-label"></div>
-            <h2 id="todo-list-placeholder">Loading...</h2>
-            <ul class="nav nav-tabs" id="tabs">
-              <li role="presentation" class="active" data-toggle="tab"><a>All</a></li>
-              <li role="presentation" data-toggle="tab"><a>Active</a></li>
-              <li role="presentation" data-toggle="tab"><a>Completed</a></li>
-            </ul>
-            <ul id="todo-list" class="list-group"></ul>
-            <form id="todo-form">
-                <input id="new-todo" placeholder="What needs to be done?" autofocus>
-                <input id="submit-todo" type="submit" value="Create">
+
+        <div class="separator-container">
+            <div class="separator line-separator">∎</div>
+        </div>
+
+        <div id="count-label" class="info"><i>You have {{itemsLeft}} items left out of {{totalItems}}</i>
+        </div>
+
+        <ul class="tabs nav-stacked list-group left" id="tabs">
+          <li role="presentation" class="active" data-toggle="tab" ng-click="activeTab='All'"><a>All</a></li>
+          <li role="presentation" data-toggle="tab" ng-click="activeTab='Active'"><a>Active</a></li>
+          <li role="presentation" data-toggle="tab" ng-click="activeTab='Completed'"><a>Completed</a></li>
+        </ul>
+
+        <div class="list-group margin create-box">
+            <form id="todo-form" class="create-element grey-background no-border" ng-submit="addTodo()">
+                <input id="new-todo" class="incomplete-item grey-background" placeholder="What needs to be done?" style="width: 80%; outline:none" ng-model="todoText" autofocus>
+                <input id="submit-todo" type="submit" class="btn btn-default create" value="Create">
             </form>
-            <div id="error"></div>
+        </div>
+
+        <section class="grey-background box">
+
+            <ul id="todo-list" class="list-group margin" ng-init="getTodoList()">   
+                <li ng-repeat="todo in todos track by $index" class="item-element dark-blue-background" ng-if="(todo.isComplete === true && !activeTab.includes('Active'))||(todo.isComplete === false && !activeTab.includes('Completed'))">
+                    <div>
+                        <button type="button" class="btn btn-default" ng-click="updateTodo(todo.id, todo.isComplete, todo.title)">
+                            <input type="checkbox" id="tick" ng-model="todo.isComplete">
+                            </input>
+                        </button> 
+
+                        <div id="item" ng-if="todo.isComplete&&!updating" class="complete-item poiret-font">
+                            {{todo.title}}
+                        </div>
+
+                        <div id="item" ng-if="!todo.isComplete&&!updating" class="incomplete-item poiret-font">
+                            {{todo.title}}
+                        </div>
+
+                        <input type="text" id="item" ng-if="updating" class="incomplete-item grey-background" ng-model="todo.title" >
+                        </input>
+
+                        <div class="right-box">
+                            <button id="deleteButton" type="button" class="btn btn-default" ng-click="deleteTodo(todo.id)">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+
+                            <button id="updateButton" type="button" class="btn btn-default" ng-hide="updating" ng-click="updating=true">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                            </button>
+
+                            <button id="doneButton" type="button" class="btn btn-default" ng-show="updating" ng-click="updateTodo(todo.id, todo.isComplete, todo.title); updating = false;">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            
+            <div id="error" ng-model="error">{{error}}</div>
+            
         </section>
-        <script type="text/javascript" src="main.js"></script>
+
+        <div class="footer">> Georgiana Ginghina <</div>
     </body>
 </html>
