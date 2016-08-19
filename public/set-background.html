@@ -1,7 +1,8 @@
-<div class="ngdialog-message">
-	<h2>Set your own background !</h2>
-	<input colorpicker colorpicker-parent="true" colorpicker-size="200" type="text" ng-model="background" />
-</div>
-<div class="ngdialog-buttons mt">
-	<button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="next()">►</button>
+<div class="ngdialog-buttons">
+	<h2 style="text-align: center">Set your own background !</h2>
+	<div class="margin" style="text-align: center">
+		
+		<input colorpicker colorpicker-parent="true" colorpicker-size="200" type="text" ng-model="background" />
+		<button type="button" class="btn btn-default margin-small" ng-click="setBackground(background)">Set</button>
+	</div>
 </div>

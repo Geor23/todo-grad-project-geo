@@ -12,7 +12,6 @@ app.controller("mainController", ["$scope", 'ngDialog', function($scope, ngDialo
     $scope.totalItems = 0;
     $scope.updating = false;
     $scope.activeTab = "All";
-    $scope.background;
 
     $scope.openBackgroundDialog = function() {
         ngDialog.open({ 
@@ -23,6 +22,11 @@ app.controller("mainController", ["$scope", 'ngDialog', function($scope, ngDialo
             closeByEscape: true,
             scope: $scope 
         });
+    };
+
+    $scope.setBackground = function(bck) {
+        $scope.style={'background-color':bck};
+        console.log(bck);
     };
 
     $scope.addTodo = function() {

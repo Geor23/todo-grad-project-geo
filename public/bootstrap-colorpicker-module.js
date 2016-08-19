@@ -275,7 +275,6 @@ angular.module('colorpicker.module', [])
               componentSize = angular.isDefined(attrs.colorpickerSize) ? attrs.colorpickerSize : 100,
               componentSizePx = componentSize + 'px',
               inputTemplate = withInput ? '<input type="text" name="colorpicker-input" spellcheck="false">' : '',
-              closeButton = !inline ? '<button type="button" class="close close-colorpicker">&times;</button>' : '',
               template =
                   '<div class="colorpicker dropdown">' +
                       '<div class="dropdown-menu">' +
@@ -284,7 +283,6 @@ angular.module('colorpicker.module', [])
                       '<colorpicker-alpha><i></i></colorpicker-alpha>' +
                       '<colorpicker-preview></colorpicker-preview>' +
                       inputTemplate +
-                      closeButton +
                       '</div>' +
                       '</div>',
               colorpickerTemplate = angular.element(template),
@@ -501,7 +499,6 @@ angular.module('colorpicker.module', [])
 
           function showColorpickerTemplate() {
 
-            //if (!colorpickerTemplate.hasClass('colorpicker-visible')) {
               update();
               colorpickerTemplate
                 .addClass('colorpicker-visible')
@@ -519,7 +516,6 @@ angular.module('colorpicker.module', [])
                   $scope.$digest(); //trigger the watcher to fire
                 }
               }
-            //}
           }
 
           if (inline === false) {
@@ -543,37 +539,13 @@ angular.module('colorpicker.module', [])
           }
 
            function hideColorpickerTemplate() {
-          //   if (colorpickerTemplate.hasClass('colorpicker-visible')) {
-          //     colorpickerTemplate.removeClass('colorpicker-visible');
-          //     emitEvent('colorpicker-closed');
-          //     // unregister the global mousedown event
-          //     $document.off('mousedown', documentMousedownHandler);
-
-          //     if (attrs.colorpickerIsOpen) {
-          //       $scope[attrs.colorpickerIsOpen] = false;
-          //       if (!$scope.$$phase) {
-          //         $scope.$digest(); //trigger the watcher to fire
-          //       }
-          //     }
-          //   }
            }
 
           colorpickerTemplate.find('button').on('click', function () {
             hideColorpickerTemplate();
           });
 
-          //if (attrs.colorpickerIsOpen) {
             showColorpickerTemplate();
-           // $scope.$watch(attrs.colorpickerIsOpen, function(shouldBeOpen) {
-
-              //if (shouldBeOpen === true) {
-               // showColorpickerTemplate();
-              //} else if (shouldBeOpen === false) {
-              //  hideColorpickerTemplate();
-             // }
-
-            //});
-          //}
         }
       };
     }]);

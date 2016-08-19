@@ -88,6 +88,7 @@ colorpicker-alpha,
 }
 .colorpicker.dropdown {
   position: relative;
+  margin-left: 40px;
 }
 .colorpicker.colorpicker-fixed-position {
   position: fixed;
@@ -165,7 +166,7 @@ colorpicker-alpha,
 }
 colorpicker-preview {
   display: block;
-  height: 10px;
+  height: 30px;
   margin: 5px 0 3px 0;
   clear: both;
   background-position: 0 100%;
