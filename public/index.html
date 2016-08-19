@@ -11,6 +11,12 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
         <script type="text/javascript" src="main.js"></script>
+        <link rel="import" href="set-background.html">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.6.2/js/ngDialog.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.6.2/css/ngDialog.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.6.2/css/ngDialog-theme-default.css">
+        <script src="https://npmcdn.com/angular-toastr/dist/angular-toastr.tpls.js"></script>
+        <link rel="stylesheet" href="https://npmcdn.com/angular-toastr/dist/angular-toastr.css" />
         <link rel="icon" type="image/ico" href="favicon.ico">
     </head>
     <body ng-controller="mainController as todoList" class="dark-blue-background">
@@ -18,7 +24,7 @@
         <header>
             <div class="right-box">
                 <div id="deleteAllButton" class="button-header" ng-click="deleteAllCompleted()">Delete Completed</div>
-                <div class="button-header" ng-click="change-background()">Change Background</div>
+                <div class="button-header" ng-click="openBackgroundDialog()" class="demo">Change Background</div>
             </div>
             <h1 class="pacifico">TODO List</h1>
         </header>
