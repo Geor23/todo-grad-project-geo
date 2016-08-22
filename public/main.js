@@ -12,6 +12,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.totalItems = 0;
     $scope.updating = false;
     $scope.activeTab = "All";
+    $scope.newList = "";
     $scope.loc = window.location.pathname;
 
     $scope.openBackgroundDialog = function() {
@@ -32,6 +33,17 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
             bck: bck
         });
         $scope.createReq("PUT", "/api/todo/bck", body, "Failed to update item.");
+    };
+
+    $scope.createNewList = function() {
+        var loc = $scope.newList;
+        console.log(loc);
+        var body= JSON.stringify({
+            loc: loc
+        });
+        $scope.createReq("POST", "/api/todo", body, "Failed to create list.");
+        window.location.pathname = $scope.newList;
+        $scope.newList = "";
     };
 
     $scope.addTodo = function() {
@@ -72,7 +84,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.getTodoList = function() {
         $scope.totalItems = 0;
         $scope.itemsLeft = 0;
-        fetch( "/api/todo")
+        fetch( "/api/todo" + loc)
             .then(function(res) {
                 if (res.status !== 200) {
                     $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
@@ -108,7 +120,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
             if (res.status !== 200 && res.status !== 201) {
                 $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;   
             }
-            $scope.getTodoList();
+            //$scope.getTodoList();
         })
         .catch(function(res){
             $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;
