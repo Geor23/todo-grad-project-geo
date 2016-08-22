@@ -56,13 +56,13 @@ module.exports = function(port, middleware, callback) {
     // create todo
     app.post("/api/todo/:list", function(req, res) {
         var list = req.params.list;
-        console.log(list);
+        //console.log(list);
         var todo = req.body;
         todo.id = getLatestId(list);
         increaseLatestId(list);
         h[list].todos.push(todo);
         res.set("Location", "/api/todo/list/" + todo.id);
-        console.log(h);
+        //console.log(h);
         res.sendStatus(201);
     });
 
@@ -93,19 +93,20 @@ module.exports = function(port, middleware, callback) {
     });
 
      //Set background
-    app.put("/api/todo/:list/:bck", function(req, res) {
+    //app.put("/api/todo/:list/:bck", function(req, res) {
         // console.log(req.body.bck);
         // bck = req.body.bck;
         // res.sendStatus(200);
-    });
+    //});
 
     //Update
     app.put("/api/todo/:list/:id", function(req, res) {
-        // var id = req.params.id;
-        // var todo = getTodo(id);
-        // todo.title = req.body.title;
-        // todo.isComplete = req.body.isComplete;
-        // res.sendStatus(200);
+        var list = req.params.list;
+        var id = req.params.id;
+        var todo = getTodo(list, id);
+        todo.title = req.body.title;
+        todo.isComplete = req.body.isComplete;
+        res.sendStatus(200);
     });
 
     function getTodo(list, id) {

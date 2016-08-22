@@ -72,7 +72,8 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     };
 
     $scope.updateTodo = function(id, complete, text) {
-        var url = "/api/todo/" + id;
+        console.log(text);
+        var url = "/api/todo/" + ($scope.loc).split("?list=")[1] + "/" + id;
         var body = JSON.stringify({
             title: text,
             isComplete: complete,
