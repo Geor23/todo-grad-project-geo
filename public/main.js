@@ -1,8 +1,8 @@
 
 /*global angular */
 
-var app = angular.module("TodoApp", []);
-app.controller("mainController", ["$scope", function($scope) {
+var app = angular.module("TodoApp", [ "ngDialog", "colorpicker.module"]);
+app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialog) {
 
     $scope.todos = [];
     $scope.todoText = "";
@@ -13,6 +13,21 @@ app.controller("mainController", ["$scope", function($scope) {
     $scope.updating = false;
     $scope.activeTab = "All";
 
+    $scope.openBackgroundDialog = function() {
+        ngDialog.open({ 
+            template: "set-background.html", 
+            className: "ngdialog-theme-default",
+            showClose: true,
+            closeByDocument: true,
+            closeByEscape: true,
+            scope: $scope 
+        });
+    };
+
+    $scope.setBackground = function(bck) {
+        $scope.style={"background-color":bck};
+        console.log(bck);
+    };
 
     $scope.addTodo = function() {
         var title = $scope.todoText;
