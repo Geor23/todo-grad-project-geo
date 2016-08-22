@@ -84,6 +84,21 @@ module.exports = function(port, middleware, callback) {
         }
     });
 
+    app.delete("/api/todo/comment", function(req, res) {
+        var list = req.body.list;
+        var id = req.body.id;
+        var comment = req.body.comment;
+        var todo = getTodo(list, id);
+        if (todo) {
+            todo.comments = todo.comments.filter(function(comm){
+                return comm !== comment;
+            });
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
      //Set background
     app.put("/api/todo/bck", function(req, res) {
         var list = req.body.list;

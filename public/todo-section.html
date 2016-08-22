@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="list-group margin" ng-show="commentOn">
-                            <ul><li ng-repeat="comment in todo.comments" class="comment-element grey-background">
+                            <ul><li ng-repeat="comment in todo.comments track by $index" class="comment-element grey-background">
                                     <div id="item" class="incomplete-item poiret-font">{{comment}}</div>
                                     <div class="right-box">
                                         <button type="button" class="btn btn-default" ng-click="deleteComment(todo.id, comment)">

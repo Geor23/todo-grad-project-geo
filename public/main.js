@@ -61,6 +61,15 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
         $scope.todoText = "";
     };
 
+    $scope.deleteComment = function(id, comment){
+        var url = "/api/todo/comment";
+        var body = JSON.stringify({
+            list: ($scope.loc).split("?list=")[1],
+            id : id,
+            comment : comment
+        });
+        $scope.createReq("DELETE", url, body, "Failed to delete item.");
+    };
    
     $scope.deleteTodo = function(id) {
         var url = "/api/todo/" + ($scope.loc).split("?list=")[1] + "/" + id;
