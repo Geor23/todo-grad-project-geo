@@ -98,6 +98,7 @@ module.exports = function(port, middleware, callback) {
         var todo = getTodo(list, id);
         todo.title = req.body.title;
         todo.isComplete = req.body.isComplete;
+        todo.comments = req.body.comments;
         res.sendStatus(200);
     });
 

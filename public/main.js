@@ -8,6 +8,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.todoText = "";
     $scope.error = "";
     $scope.textInput = "";
+    $scope.todoComment = "";
     $scope.itemsLeft = 0;
     $scope.totalItems = 0;
     $scope.updating = false;
@@ -53,12 +54,14 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
         var url = "/api/todo/" + ($scope.loc).split("?list=")[1];
         var body= JSON.stringify({
             title: title,
-            isComplete: false
+            isComplete: false,
+            comments: []
         });
         $scope.createReq("POST", url, body, "Failed to create item.");
         $scope.todoText = "";
     };
 
+   
     $scope.deleteTodo = function(id) {
         var url = "/api/todo/" + ($scope.loc).split("?list=")[1] + "/" + id;
         $scope.createReq("DELETE", url, "", "Failed to delete item.");
@@ -73,13 +76,16 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
         });
     };
 
-    $scope.updateTodo = function(id, complete, text) {
-        console.log(text);
+    $scope.updateTodo = function(id, complete, text, comment) {
+        var comments = $scope.todos[id].comments;
+        if (comment !== '') comments.push(comment); 
+        console.log(comments);
         var url = "/api/todo/" + ($scope.loc).split("?list=")[1] + "/" + id;
         var body = JSON.stringify({
             title: text,
             isComplete: complete,
-            id : id
+            id : id,
+            comments : comments
         });
         $scope.createReq("PUT", url, body, "Failed to update item.");
     };
