@@ -77,28 +77,30 @@ module.exports = function(port, middleware, callback) {
     });
 
     // Delete
-    app.delete("/api/todo/:id", function(req, res) {
-        // var id = req.params.id;
-        // var todo = getTodo(id);
-        // if (todo) {
-        //     todos = todos.filter(function(otherTodo) {
-        //         return otherTodo !== todo;
-        //     });
-        //     res.sendStatus(200);
-        // } else {
-        //     res.sendStatus(404);
-        // }
+    app.delete("/api/todo/:list/:id", function(req, res) {
+        var list = req.params.list;
+        var id = req.params.id;
+        var todo = getTodo(list, id);
+        console.log(todo);
+        if (todo) {
+            h[list].todos = h[list].todos.filter(function(otherTodo) {
+                return otherTodo !== todo;
+            });
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
     });
 
      //Set background
-    app.put("/api/todo/list/bck", function(req, res) {
+    app.put("/api/todo/:list/:bck", function(req, res) {
         // console.log(req.body.bck);
         // bck = req.body.bck;
         // res.sendStatus(200);
     });
 
     //Update
-    app.put("/api/todo/:id", function(req, res) {
+    app.put("/api/todo/:list/:id", function(req, res) {
         // var id = req.params.id;
         // var todo = getTodo(id);
         // todo.title = req.body.title;
@@ -106,10 +108,12 @@ module.exports = function(port, middleware, callback) {
         // res.sendStatus(200);
     });
 
-    function getTodo(id) {
-        // return _.find(todos, function(todo) {
-        //     return todo.id === id;
-        // });
+    function getTodo(list, id) {
+        var todos = h[list].todos;
+        //console.log(todos);
+        return _.find(todos, function(todo) {
+            return String(todo.id) === String(id);
+        });
     }
 
     var server = app.listen(port, callback);

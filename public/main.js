@@ -38,7 +38,6 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
 
     $scope.createNewList = function() {
         var loc = $scope.newList;
-        console.log(loc);
         var body= JSON.stringify({
             loc: loc
         });
@@ -50,7 +49,6 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.addTodo = function() {
         var title = $scope.todoText;
         var url = "/api/todo/" + ($scope.loc).split("?list=")[1];
-        console.log(title);
         var body= JSON.stringify({
             title: title,
             isComplete: false
@@ -60,7 +58,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     };
 
     $scope.deleteTodo = function(id) {
-        var url = "/api/todo/" + id;
+        var url = "/api/todo/" + ($scope.loc).split("?list=")[1] + "/" + id;
         $scope.createReq("DELETE", url, "", "Failed to delete item.");
     };
 
@@ -86,29 +84,31 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.getTodoList = function() {
         $scope.totalItems = 0;
         $scope.itemsLeft = 0;
-        var url = "/api/todo/" + ($scope.loc).split("?list=")[1];
-        fetch(url)
-            .then(function(res) {
-                if (res.status !== 200) {
-                    $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
-                    return;
-                } else {
-                    res.json().then(function(data) {
-                        $scope.style={"background-color":data.bck};
-                        $scope.todos = data.todos;
-                        $scope.todos.forEach(function(todo) {
-                            $scope.totalItems += 1 ;
-                            if (todo.isComplete === false) {
-                                $scope.itemsLeft += 1 ;
-                            }
+        if ($scope.loc!=='') {
+            var url = "/api/todo/" + ($scope.loc).split("?list=")[1];
+            fetch(url)
+                .then(function(res) {
+                    if (res.status !== 200) {
+                        $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
+                        return;
+                    } else {
+                        res.json().then(function(data) {
+                            $scope.style={"background-color":data.bck};
+                            $scope.todos = data.todos;
+                            $scope.todos.forEach(function(todo) {
+                                $scope.totalItems += 1 ;
+                                if (todo.isComplete === false) {
+                                    $scope.itemsLeft += 1 ;
+                                }
+                            });
+                            $scope.$apply();
                         });
-                        $scope.$apply();
-                    });
-                }
-            })
-            .catch(function(res){
-                $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
-            });
+                    }
+                })
+                .catch(function(res){
+                    $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
+                });
+        }
     };
 
     $scope.createReq = function (method, url, body, errorMsg){
@@ -123,7 +123,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
             if (res.status !== 200 && res.status !== 201) {
                 $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;   
             }
-            //$scope.getTodoList();
+            $scope.getTodoList();
         })
         .catch(function(res){
             $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;
