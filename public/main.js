@@ -86,8 +86,8 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.getTodoList = function() {
         $scope.totalItems = 0;
         $scope.itemsLeft = 0;
-        console.log(window.location.pathname);
-        fetch( "/api/todo" + window.location.pathname)
+        var url = "/api/todo/" + ($scope.loc).split("?list=")[1];
+        fetch(url)
             .then(function(res) {
                 if (res.status !== 200) {
                     $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;

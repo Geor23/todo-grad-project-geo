@@ -68,6 +68,7 @@ module.exports = function(port, middleware, callback) {
 
     // Read
     app.get("/api/todo/:list", function(req, res) {
+        var list = req.params.list;
         var response = {
             todos : getList(list),
             bck: getBck(list)
