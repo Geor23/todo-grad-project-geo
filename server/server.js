@@ -19,7 +19,6 @@ module.exports = function(port, middleware, callback) {
 
     // Create new list
     app.post("/api/todo", function(req, res) {
-        console.log(req.body);
         var loc = req.body.loc;
         if (!getIfExists(loc)) {
             h[loc] = new Object();
@@ -29,12 +28,6 @@ module.exports = function(port, middleware, callback) {
         }
         console.log(h[loc]);
         console.log(h);
-
-        // var todo = req.body;
-        // todo.id = latestId.toString();
-        // latestId++;
-        // todos.push(todo);
-        // res.set("Location", "/api/todo/" + todo.id);
         res.sendStatus(201);
     });
 
@@ -62,11 +55,14 @@ module.exports = function(port, middleware, callback) {
 
     // create todo
     app.post("/api/todo/:list", function(req, res) {
+        var list = req.params.list;
+        console.log(list);
         var todo = req.body;
         todo.id = getLatestId(list);
         increaseLatestId(list);
         h[list].todos.push(todo);
         res.set("Location", "/api/todo/list/" + todo.id);
+        console.log(h);
         res.sendStatus(201);
     });
 

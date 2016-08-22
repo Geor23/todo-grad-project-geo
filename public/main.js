@@ -14,6 +14,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.activeTab = "All";
     $scope.newList = "";
     $scope.loc = window.location.search;
+    console.log("loooooo " + ($scope.loc).split("?list=")[1]);
 
     $scope.openBackgroundDialog = function() {
         ngDialog.open({ 
@@ -42,19 +43,19 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
             loc: loc
         });
         $scope.createReq("POST", "/api/todo", body, "Failed to create list.");
-        console.log("yuyyyyy " + loc);
         window.location.replace(window.location + "?list=" +  encodeURIComponent(loc));
         $scope.newList = "";
     };
 
     $scope.addTodo = function() {
         var title = $scope.todoText;
+        var url = "/api/todo/" + ($scope.loc).split("?list=")[1];
         console.log(title);
         var body= JSON.stringify({
             title: title,
             isComplete: false
         });
-        $scope.createReq("POST", "/api/todo", body, "Failed to create item.");
+        $scope.createReq("POST", url, body, "Failed to create item.");
         $scope.todoText = "";
     };
 
