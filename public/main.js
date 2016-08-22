@@ -13,7 +13,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.updating = false;
     $scope.activeTab = "All";
     $scope.newList = "";
-    $scope.loc = window.location.pathname;
+    $scope.loc = window.location.search;
 
     $scope.openBackgroundDialog = function() {
         ngDialog.open({ 
@@ -42,7 +42,8 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
             loc: loc
         });
         $scope.createReq("POST", "/api/todo", body, "Failed to create list.");
-        window.location.pathname = $scope.newList;
+        console.log("yuyyyyy " + loc);
+        window.location.replace(window.location + "?list=" +  encodeURIComponent(loc));
         $scope.newList = "";
     };
 
@@ -84,7 +85,8 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.getTodoList = function() {
         $scope.totalItems = 0;
         $scope.itemsLeft = 0;
-        fetch( "/api/todo" + loc)
+        console.log(window.location.pathname);
+        fetch( "/api/todo" + window.location.pathname)
             .then(function(res) {
                 if (res.status !== 200) {
                     $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;

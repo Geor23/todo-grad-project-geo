@@ -21,7 +21,7 @@ module.exports = function(port, middleware, callback) {
     app.post("/api/todo", function(req, res) {
         console.log(req.body);
         var loc = req.body.loc;
-        if (!getIfExists) {
+        if (!getIfExists(loc)) {
             h[loc] = new Object();
             h[loc].bck = "#191818";
             h[loc].latestId = 0;

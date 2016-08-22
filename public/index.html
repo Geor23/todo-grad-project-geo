@@ -32,7 +32,7 @@
             <div class="separator line-separator">∎</div>
         </div>
 
-        <div ng-hide="{{loc=='/'}}">
+        <div ng-hide="{{loc==''}}">
 
             <div id="count-label" class="info"><i>You have {{itemsLeft}} items left out of {{totalItems}}</i>
             </div>
@@ -58,7 +58,7 @@
 
         </div>
 
-        <div ng-show="{{loc=='/'}}">
+        <div ng-show="{{loc==''}}">
             <section class="grey-background box">
                 <h2> Create your own todo list</h2>
                 <h3> and share the link with your team-mates</h3>
