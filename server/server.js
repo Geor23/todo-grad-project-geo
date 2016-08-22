@@ -26,8 +26,6 @@ module.exports = function(port, middleware, callback) {
             h[loc].latestId = 0;
             h[loc].todos = [];
         }
-        console.log(h[loc]);
-        console.log(h);
         res.sendStatus(201);
     });
 
