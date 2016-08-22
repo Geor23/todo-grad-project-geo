@@ -17,12 +17,10 @@ module.exports = function(port, middleware, callback) {
     // Create new list
     app.post("/api/todo", function(req, res) {
         var loc = req.body.loc;
-        if (!getIfExists(loc)) {
-            h[loc] = {};
-            h[loc].bck = "#191818";
-            h[loc].latestId = 0;
-            h[loc].todos = [];
-        }
+        h[loc] = {};
+        h[loc].bck = "#191818";
+        h[loc].latestId = 0;
+        h[loc].todos = [];
         res.sendStatus(201);
     });
 
@@ -32,15 +30,6 @@ module.exports = function(port, middleware, callback) {
 
     function getLatestId(list) {
         return h[list].latestId;
-    }
-
-    function getIfExists(list) {
-        if (h[list]!== undefined) {
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
     function getBck(list) {
@@ -77,14 +66,10 @@ module.exports = function(port, middleware, callback) {
         var list = req.params.list;
         var id = req.params.id;
         var todo = getTodo(list, id);
-        if (todo) {
-            h[list].todos = h[list].todos.filter(function(otherTodo) {
-                return otherTodo !== todo;
-            });
-            res.sendStatus(200);
-        } else {
-            res.sendStatus(404);
-        }
+        h[list].todos = h[list].todos.filter(function(otherTodo) {
+            return otherTodo !== todo;
+        });
+        res.sendStatus(200);
     });
 
     app.delete("/api/todo/comment", function(req, res) {
@@ -92,14 +77,10 @@ module.exports = function(port, middleware, callback) {
         var id = req.body.id;
         var comment = req.body.comment;
         var todo = getTodo(list, id);
-        if (todo) {
-            todo.comments = todo.comments.filter(function(comm){
-                return comm !== comment;
-            });
-            res.sendStatus(200);
-        } else {
-            res.sendStatus(404);
-        }
+        todo.comments = todo.comments.filter(function(comm){
+            return comm !== comment;
+        });
+        res.sendStatus(200);
     });
 
      //Set background

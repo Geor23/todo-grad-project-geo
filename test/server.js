@@ -36,12 +36,11 @@ describe("server", function() {
                 json: {
                     loc: "loc"
                 }
-            }, function(error, response) {
-                assert.equal(response.statusCode, 201);
-            });
-            request(todoListUrl+"/loc", function(error, response) {
-                assert.equal(response.headers["content-type"], "application/json; charset=utf-8");
-                done();
+            }, function() {
+                request(todoListUrl+"/loc", function(error, response) {
+                    assert.equal(response.headers["content-type"], "application/json; charset=utf-8");
+                    done();
+                });
             });
         });
         it("responds with a body that is a JSON empty object", function(done) {
@@ -165,6 +164,105 @@ describe("server", function() {
                         request.get(todoListUrl + "/loc/", function(error, response, body) {
                             assert.deepEqual(JSON.parse(body), { todos: [], bck: "#191818" });
                             done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+    describe("change the background", function() {
+        it("changes the bck value", function(done) {
+            request.post({
+                url: todoListUrl,
+                json: {
+                    loc: "loc"
+                }
+            }, function() {
+                request.put({
+                    url: todoListUrl+"/bck",
+                    json: {
+                        list: "loc",
+                        bck: "00000"
+                    }
+                }, function() {
+                    request.get(todoListUrl + "/loc/", function(error, response, body) {
+                        assert.deepEqual(JSON.parse(body), { todos: [], bck: "00000" });
+                        done();
+                    });
+                });
+            });
+        });
+    });
+    describe("delete a comment", function() {
+        it("add a comment", function(done) {
+            request.post({
+                url: todoListUrl,
+                json: {
+                    loc: "loc"
+                }
+            }, function() {
+                request.post({
+                    url: todoListUrl+"/loc",
+                    json: {
+                        title: "This is a TODO item",
+                        done: false
+                    }
+                }, function() {
+
+                    request.put({
+                        url: todoListUrl+"/loc/0",
+                        json: {
+                            title: "This is a TODO item",
+                            done: false,
+                            comments: ["This is a comment"]
+                        }
+                    }, function() {
+
+                        request.get(todoListUrl+"/loc", function(error, response, body) {
+                            assert.deepEqual(JSON.parse(body), { todos: [{ title: "This is a TODO item", done: false, id: 0, comments: ["This is a comment"] }], bck: "#191818" });
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+        it("delete a comment", function(done) {
+            request.post({
+                url: todoListUrl,
+                json: {
+                    loc: "loc"
+                }
+            }, function() {
+                request.post({
+                    url: todoListUrl+"/loc",
+                    json: {
+                        title: "This is a TODO item",
+                        done: false
+                    }
+                }, function() {
+
+                    request.put({
+                        url: todoListUrl+"/loc/0",
+                        json: {
+                            title: "This is a TODO item",
+                            done: false,
+                            comments: ["This is a comment"]
+                        }
+                    }, function() {
+
+                        request.del({
+                            url: todoListUrl+"/comment",
+                            json: {
+                                list: "loc",
+                                id: 0,
+                                comment: "This is a comment"
+                            }
+                        }, function() {
+
+                            request.get(todoListUrl+"/loc", function(error, response, body) {
+                                assert.deepEqual(JSON.parse(body), { todos: [{ title: "This is a TODO item", done: false, id: 0, comments: [] }], bck: "#191818" });
+                                done();
+                            });
                         });
                     });
                 });
