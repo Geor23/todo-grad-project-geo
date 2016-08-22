@@ -26,7 +26,10 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
 
     $scope.setBackground = function(bck) {
         $scope.style={"background-color":bck};
-        console.log(bck);
+        var body = JSON.stringify({
+            bck: bck
+        });
+        $scope.createReq("PUT", "/api/todo/bck", body, "Failed to update item.");
     };
 
     $scope.addTodo = function() {
@@ -74,7 +77,8 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
                     return;
                 } else {
                     res.json().then(function(data) {
-                        $scope.todos = data;
+                        $scope.style={"background-color":data.bck};
+                        $scope.todos = data.todos;
                         $scope.todos.forEach(function(todo) {
                             $scope.totalItems += 1 ;
                             if (todo.isComplete === false) {
@@ -91,6 +95,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     };
 
     $scope.createReq = function (method, url, body, errorMsg){
+        console.log(body);
         fetch( url, {
             method: method,
             headers: {

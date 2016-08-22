@@ -14,6 +14,7 @@ module.exports = function(port, middleware, callback) {
 
     var latestId = 0;
     var todos = [];
+    var bck = "#191818";
 
     // Create
     app.post("/api/todo", function(req, res) {
@@ -27,7 +28,11 @@ module.exports = function(port, middleware, callback) {
 
     // Read
     app.get("/api/todo", function(req, res) {
-        res.json(todos);
+        var response = {
+            todos : todos,
+            bck: bck
+        };
+        res.json(response);
     });
 
     // Delete
@@ -42,6 +47,13 @@ module.exports = function(port, middleware, callback) {
         } else {
             res.sendStatus(404);
         }
+    });
+
+     //Set background
+    app.put("/api/todo/bck", function(req, res) {
+        console.log(req.body.bck);
+        bck = req.body.bck;
+        res.sendStatus(200);
     });
 
     //Update
