@@ -14,7 +14,6 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.activeTab = "All";
     $scope.newList = "";
     $scope.loc = window.location.search;
-    console.log("loooooo " + ($scope.loc).split("?list=")[1]);
 
     $scope.openBackgroundDialog = function() {
         ngDialog.open({ 
@@ -93,6 +92,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
                 .then(function(res) {
                     if (res.status !== 200) {
                         $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
+                        window.location.search="";
                         return;
                     } else {
                         res.json().then(function(data) {
@@ -110,6 +110,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
                 })
                 .catch(function(res){
                     $scope.error = "Failed to get list. Server returned " + res.status + " - " + res.responseText;
+                    window.location.search="";
                 });
         }
     };

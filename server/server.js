@@ -56,13 +56,11 @@ module.exports = function(port, middleware, callback) {
     // create todo
     app.post("/api/todo/:list", function(req, res) {
         var list = req.params.list;
-        //console.log(list);
         var todo = req.body;
         todo.id = getLatestId(list);
         increaseLatestId(list);
         h[list].todos.push(todo);
         res.set("Location", "/api/todo/list/" + todo.id);
-        //console.log(h);
         res.sendStatus(201);
     });
 
@@ -81,7 +79,6 @@ module.exports = function(port, middleware, callback) {
         var list = req.params.list;
         var id = req.params.id;
         var todo = getTodo(list, id);
-        console.log(todo);
         if (todo) {
             h[list].todos = h[list].todos.filter(function(otherTodo) {
                 return otherTodo !== todo;
@@ -96,7 +93,6 @@ module.exports = function(port, middleware, callback) {
     app.put("/api/todo/bck", function(req, res) {
         var list = req.body.list;
         h[list].bck = req.body.bck;
-        console.log(h[list]);
         res.sendStatus(200);
     });
 
