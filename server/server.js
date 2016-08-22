@@ -12,13 +12,13 @@ module.exports = function(port, middleware, callback) {
     app.use(express.static("public"));
     app.use(bodyParser.json());
 
-    var h = new Object();
+    var h = {};
 
     // Create new list
     app.post("/api/todo", function(req, res) {
         var loc = req.body.loc;
         if (!getIfExists(loc)) {
-            h[loc] = new Object();
+            h[loc] = {};
             h[loc].bck = "#191818";
             h[loc].latestId = 0;
             h[loc].todos = [];
@@ -35,9 +35,12 @@ module.exports = function(port, middleware, callback) {
     }
 
     function getIfExists(list) {
-        if (h[list]!== undefined)
+        if (h[list]!== undefined) {
             return true;
-        else return false;
+        }
+        else {
+            return false;
+        }
     }
 
     function getBck(list) {
@@ -55,7 +58,7 @@ module.exports = function(port, middleware, callback) {
         todo.id = getLatestId(list);
         increaseLatestId(list);
         h[list].todos.push(todo);
-        res.set("Location", "/api/todo/list/" + todo.id);
+        res.set("Location", "/api/todo/" + todo.id);
         res.sendStatus(201);
     });
 

@@ -32,16 +32,16 @@
 
                         <div class="list-group margin" ng-show="commentOn">
                             <ul><li ng-repeat="comment in todo.comments track by $index" class="comment-element grey-background">
-                                    <div id="item" class="incomplete-item poiret-font">{{comment}}</div>
+                                    <div class="incomplete-item poiret-font">{{comment}}</div>
                                     <div class="right-box">
                                         <button type="button" class="btn btn-default" ng-click="deleteComment(todo.id, comment)">
                                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                         </button>
                                     </div>
                             </li></ul>
-                            <form id="todo-form" class="create-element grey-background no-border" ng-submit="updateTodo(todo.id, todo.isComplete, todo.title, todo.comments, todoComment); todoComment='';">
-                                <input id="new-todo" class="incomplete-item grey-background" placeholder="Comments" style="width: 80%; outline:none; border:0px solid" ng-model="todoComment" autofocus>
-                                <input id="submit-todo" type="submit" class="btn btn-default create" value="Comment">
+                            <form class="create-element grey-background no-border" ng-submit="updateTodo(todo.id, todo.isComplete, todo.title, todo.comments, todoComment); todoComment='';">
+                                <input class="incomplete-item grey-background" placeholder="Comments" style="width: 80%; outline:none; border:0px solid" ng-model="todoComment" autofocus>
+                                <input type="submit" class="btn btn-default create" value="Comment">
                             </form>
 
                         </div>

@@ -79,14 +79,16 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.deleteAllCompleted = function() {
         $scope.todos.forEach(function(todo) {
             if (todo.isComplete === true) {
-                var url = "/api/todo/" + ($scope.loc).split("?list=")[1] + "/" + id;
+                var url = "/api/todo/" + ($scope.loc).split("?list=")[1] + "/" + todo.id;
                 $scope.createReq("DELETE", url, "", "Failed to delete item.");
             }
         });
     };
 
     $scope.updateTodo = function(id, complete, text, comments, comment) {
-        if (comment !== '') comments.push(comment); 
+        if (comment !== "") {
+            comments.push(comment); 
+        }
         var url = "/api/todo/" + ($scope.loc).split("?list=")[1] + "/" + id;
         var body = JSON.stringify({
             title: text,
@@ -100,7 +102,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.getTodoList = function() {
         $scope.totalItems = 0;
         $scope.itemsLeft = 0;
-        if ($scope.loc!=='') {
+        if ($scope.loc!=="") {
             var url = "/api/todo/" + ($scope.loc).split("?list=")[1];
             fetch(url)
                 .then(function(res) {
