@@ -13,6 +13,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.updating = false;
     $scope.activeTab = "All";
     $scope.newList = "";
+    $scope.commentOn = false;
     $scope.loc = window.location.search;
 
     $scope.openBackgroundDialog = function() {

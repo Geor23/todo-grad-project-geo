@@ -31,6 +31,18 @@
                             <button id="doneButton" type="button" class="btn btn-default" ng-show="updating" ng-click="updateTodo(todo.id, todo.isComplete, todo.title); updating = false;">
                                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                             </button>
+
+                            <button id="commentButton" type="button" class="btn btn-default" ng-click="commentOn = !commentOn;">
+                                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+
+                        <div class="list-group margin" ng-show="commentOn">
+                            <form id="todo-form" class="create-element grey-background no-border" ng-submit="commentTodo()">
+                                <input id="new-todo" class="incomplete-item grey-background" placeholder="Comments" style="width: 80%; outline:none; border:0px solid" ng-model="todoComment" autofocus>
+                                <input id="submit-todo" type="submit" class="btn btn-default create" value="Comment">
+                            </form>
                         </div>
                     </div>
                 </li>
