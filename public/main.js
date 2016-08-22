@@ -65,7 +65,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.deleteAllCompleted = function() {
         $scope.todos.forEach(function(todo) {
             if (todo.isComplete === true) {
-                var url = "/api/todo/" + todo.id;
+                var url = "/api/todo/" + ($scope.loc).split("?list=")[1] + "/" + id;
                 $scope.createReq("DELETE", url, "", "Failed to delete item.");
             }
         });
