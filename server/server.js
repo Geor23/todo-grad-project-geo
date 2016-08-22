@@ -93,11 +93,12 @@ module.exports = function(port, middleware, callback) {
     });
 
      //Set background
-    //app.put("/api/todo/:list/:bck", function(req, res) {
-        // console.log(req.body.bck);
-        // bck = req.body.bck;
-        // res.sendStatus(200);
-    //});
+    app.put("/api/todo/bck", function(req, res) {
+        var list = req.body.list;
+        h[list].bck = req.body.bck;
+        console.log(h[list]);
+        res.sendStatus(200);
+    });
 
     //Update
     app.put("/api/todo/:list/:id", function(req, res) {
@@ -111,7 +112,6 @@ module.exports = function(port, middleware, callback) {
 
     function getTodo(list, id) {
         var todos = h[list].todos;
-        //console.log(todos);
         return _.find(todos, function(todo) {
             return String(todo.id) === String(id);
         });

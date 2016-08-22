@@ -30,10 +30,12 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.setBackground = function(bck) {
         console.log($scope.loc);
         $scope.style={"background-color":bck};
+        var url = "/api/todo/bck";
         var body = JSON.stringify({
+            list: ($scope.loc).split("?list=")[1],
             bck: bck
         });
-        $scope.createReq("PUT", "/api/todo/bck", body, "Failed to update item.");
+        $scope.createReq("PUT", url, body, "Failed to update item.");
     };
 
     $scope.createNewList = function() {
