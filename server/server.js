@@ -12,9 +12,6 @@ module.exports = function(port, middleware, callback) {
     app.use(express.static("public"));
     app.use(bodyParser.json());
 
-    //var latestId = 0;
-    //var todos = [];
-    //var bck = "#191818";
     var h = new Object();
 
     // Create new list
