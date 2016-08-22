@@ -12,6 +12,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.totalItems = 0;
     $scope.updating = false;
     $scope.activeTab = "All";
+    $scope.loc = window.location.pathname;
 
     $scope.openBackgroundDialog = function() {
         ngDialog.open({ 
@@ -25,6 +26,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     };
 
     $scope.setBackground = function(bck) {
+        console.log($scope.loc);
         $scope.style={"background-color":bck};
         var body = JSON.stringify({
             bck: bck
@@ -95,7 +97,6 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     };
 
     $scope.createReq = function (method, url, body, errorMsg){
-        console.log(body);
         fetch( url, {
             method: method,
             headers: {
@@ -104,7 +105,6 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
             body: body
         })
         . then(function(res) {
-            console.log(res.responseText);
             if (res.status !== 200 && res.status !== 201) {
                 $scope.error = errorMsg + " Server returned " + res.status + " - " + res.responseText;   
             }

@@ -32,25 +32,46 @@
             <div class="separator line-separator">∎</div>
         </div>
 
-        <div id="count-label" class="info"><i>You have {{itemsLeft}} items left out of {{totalItems}}</i>
+        <div ng-hide="{{loc=='/'}}">
+
+            <div id="count-label" class="info"><i>You have {{itemsLeft}} items left out of {{totalItems}}</i>
+            </div>
+
+            <ul class="tabs nav-stacked list-group left" id="tabs">
+              <li role="presentation" class="active" data-toggle="tab" ng-click="activeTab='All'"><a>All</a></li>
+              <li role="presentation" data-toggle="tab" ng-click="activeTab='Active'"><a>Active</a></li>
+              <li role="presentation" data-toggle="tab" ng-click="activeTab='Completed'"><a>Completed</a></li>
+            </ul>
+
+
+            <div class="list-group margin create-box">
+                <form id="todo-form" class="create-element grey-background no-border" ng-submit="addTodo()">
+                    <input id="new-todo" class="incomplete-item grey-background" placeholder="What needs to be done?" style="width: 80%; outline:none; border:0px solid" ng-model="todoText" autofocus>
+                    <input id="submit-todo" type="submit" class="btn btn-default create" value="Create">
+                </form>
+            </div>
+
+            <div ng-include="'todo-section.html'"></div>
+
+
+            <div id="error" ng-model="error">{{error}}</div>
+
         </div>
 
-        <ul class="tabs nav-stacked list-group left" id="tabs">
-          <li role="presentation" class="active" data-toggle="tab" ng-click="activeTab='All'"><a>All</a></li>
-          <li role="presentation" data-toggle="tab" ng-click="activeTab='Active'"><a>Active</a></li>
-          <li role="presentation" data-toggle="tab" ng-click="activeTab='Completed'"><a>Completed</a></li>
-        </ul>
+        <div ng-show="{{loc=='/'}}">
+            <section class="grey-background box">
+                <h2> Create your own todo list</h2>
+                <h3> and share the link with your team-mates</h3>
 
-
-        <div class="list-group margin create-box">
-            <form id="todo-form" class="create-element grey-background no-border" ng-submit="addTodo()">
-                <input id="new-todo" class="incomplete-item grey-background" placeholder="What needs to be done?" style="width: 80%; outline:none; border:0px solid" ng-model="todoText" autofocus>
-                <input id="submit-todo" type="submit" class="btn btn-default create" value="Create">
-            </form>
+                <div class="list-group margin">
+                    <form id="new-form" class="create-element grey-background no-border" ng-submit="addNew()">
+                        <input id="new-list" class="incomplete-item grey-background" placeholder="How do you want your todo list to be called?" style="width: 80%; outline:none; border:0px solid" ng-model="todoText" autofocus>
+                        <input id="submit-list" type="submit" class="btn btn-default create" value="Create">
+                    </form>
+                </div>
+            </section>
         </div>
 
-        <div ng-include="'todo-section.html'"></div>
-        <div id="error" ng-model="error">{{error}}</div>
         <div class="footer">> Georgiana Ginghina <</div>
 
     </body>
