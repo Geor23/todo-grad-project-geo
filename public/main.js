@@ -76,10 +76,8 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
         });
     };
 
-    $scope.updateTodo = function(id, complete, text, comment) {
-        var comments = $scope.todos[id].comments;
+    $scope.updateTodo = function(id, complete, text, comments, comment) {
         if (comment !== '') comments.push(comment); 
-        console.log(comments);
         var url = "/api/todo/" + ($scope.loc).split("?list=")[1] + "/" + id;
         var body = JSON.stringify({
             title: text,
