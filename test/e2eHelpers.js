@@ -50,6 +50,12 @@ module.exports.teardownDriver = function() {
     driver.quit();
 };
 
+module.exports.createList = function() {
+    var item = driver.findElement(webdriver.By.id("new-list")).click();
+    driver.findElement(webdriver.By.id("new-list")).sendKeys("u");
+    driver.findElement(webdriver.By.id("submit-list")).click();
+};
+
 module.exports.reportCoverage = function() {
     if (gatheringCoverage) {
         fs.writeFileSync(coverageFilename, JSON.stringify(collector.getFinalCoverage()), "utf8");
@@ -58,6 +64,11 @@ module.exports.reportCoverage = function() {
 
 module.exports.navigateToSite = function() {
     driver.get(baseUrl);
+    var item = driver.findElement(webdriver.By.id("new-list"));
+    driver.wait(webdriver.until.elementIsVisible(item), 5000);
+    item.click();
+    driver.findElement(webdriver.By.id("new-list")).sendKeys("u");
+    driver.findElement(webdriver.By.id("submit-list")).click();
 };
 
 module.exports.getTitleText = function() {
