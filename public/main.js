@@ -52,7 +52,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
     $scope.addTodo = function() {
         var title = $scope.todoText;
         var url = "/api/todo/" + ($scope.loc).split("?list=")[1];
-        var body= JSON.stringify({
+        var body = JSON.stringify({
             title: title,
             isComplete: false,
             comments: []
@@ -85,8 +85,8 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
         });
     };
 
-    $scope.updateTodo = function(id, complete, text, comments, comment) {
-        if (comment !== "") {
+    $scope.updateTodo = function(id, complete, text, comments=[], comment) {
+        if (comment && comment !== "") {
             comments.push(comment); 
         }
         var url = "/api/todo/" + ($scope.loc).split("?list=")[1] + "/" + id;
@@ -112,6 +112,7 @@ app.controller("mainController", ["$scope", "ngDialog", function($scope, ngDialo
                         return;
                     } else {
                         res.json().then(function(data) {
+                            console.log(data)
                             $scope.style={"background-color":data.bck};
                             $scope.todos = data.todos;
                             $scope.todos.forEach(function(todo) {

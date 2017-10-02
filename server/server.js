@@ -2,8 +2,11 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var _ = require("underscore");
 var fetch = require('whatwg-fetch');
+const MongoClient = require('mongodb').MongoClient;
+var ObjectId = require('mongodb').ObjectID;
 
 module.exports = function(port, middleware, callback) {
+    
     var app = express();
 
     if (middleware) {
@@ -14,99 +17,120 @@ module.exports = function(port, middleware, callback) {
 
     var h = {};
 
-    // Create new list
-    app.post("/api/todo", function(req, res) {
-        var loc = req.body.loc;
-        h[loc] = {};
-        h[loc].bck = "#191818";
-        h[loc].latestId = 0;
-        h[loc].todos = [];
-        res.sendStatus(201);
-    });
+    MongoClient.connect(process.env.MONGO, (err, db) => {  
+        if (err) {
+            return console.log(err);
+        }
 
-    function getList(list) {
-        return h[list].todos;
-    }
-
-    function getLatestId(list) {
-        return h[list].latestId;
-    }
-
-    function getBck(list) {
-        return h[list].bck;
-    }
-
-    function increaseLatestId(list){
-        h[list].latestId++;
-    }
-
-    // create todo
-    app.post("/api/todo/:list", function(req, res) {
-        var list = req.params.list;
-        var todo = req.body;
-        todo.id = getLatestId(list);
-        increaseLatestId(list);
-        h[list].todos.push(todo);
-        res.set("Location", "/api/todo/" + todo.id);
-        res.sendStatus(201);
-    });
-
-    // Read
-    app.get("/api/todo/:list", function(req, res) {
-        var list = req.params.list;
-        var response = {
-            todos : getList(list),
-            bck: getBck(list)
-        };
-        res.json(response);
-    });
-
-    // Delete
-    app.delete("/api/todo/:list/:id", function(req, res) {
-        var list = req.params.list;
-        var id = req.params.id;
-        var todo = getTodo(list, id);
-        h[list].todos = h[list].todos.filter(function(otherTodo) {
-            return otherTodo !== todo;
+        // Create new list
+        app.post("/api/todo", function(req, res) {
+            db.collection('lists')
+            .insertOne({
+                name: req.body.loc,
+                bck: "#191818",
+                todos: []
+            })
+            .then(function() {
+                res.sendStatus(201);
+            })
         });
-        res.sendStatus(200);
-    });
 
-    app.delete("/api/todo/comment", function(req, res) {
-        var list = req.body.list;
-        var id = req.body.id;
-        var comment = req.body.comment;
-        var todo = getTodo(list, id);
-        todo.comments = todo.comments.filter(function(comm){
-            return comm !== comment;
+        // create todo
+        app.post("/api/todo/:list", function(req, res) {
+            db.collection('lists')
+            .findOne({name: req.params.list})
+            .then(function(result) {
+                db.collection('todos')
+                .insertOne({
+                    title: req.body.title,
+                    listId: result._id,
+                    isComplete: false
+                })
+                .then(function(rs) {
+                    res.set("Location", "/api/todo/" + rs.insertedId);
+                    res.sendStatus(201);
+                })
+            });
         });
-        res.sendStatus(200);
-    });
 
-     //Set background
-    app.put("/api/todo/bck", function(req, res) {
-        var list = req.body.list;
-        h[list].bck = req.body.bck;
-        res.sendStatus(200);
-    });
-
-    //Update
-    app.put("/api/todo/:list/:id", function(req, res) {
-        var list = req.params.list;
-        var id = req.params.id;
-        var todo = getTodo(list, id);
-        todo.title = req.body.title;
-        todo.isComplete = req.body.isComplete;
-        todo.comments = req.body.comments;
-        res.sendStatus(200);
-    });
-
-    function getTodo(list, id) {
-        var todos = h[list].todos;
-        return _.find(todos, function(todo) {
-            return String(todo.id) === String(id);
+        // Read
+        app.get("/api/todo/:list", function(req, res) {
+            var list = req.params.list;
+            db.collection('lists')
+            .findOne({name: list})
+            .then(function(ls) {
+                db.collection('todos')
+                .find({listId: ls._id})
+                .toArray(function(err, rst) {
+                    var response = {
+                        todos : rst,
+                        bck: ls.bck
+                    };
+                    res.json(response);
+                });
+            })
         });
-    }
+
+        // Delete todo
+        app.delete("/api/todo/:list/:id", function(req, res) {
+            db.collection('todos')
+                .remove(
+                    {_id : ObjectId(req.params.id)},
+                    true
+                )
+                .then(function(rs) {
+                    res.sendStatus(200);
+                })
+        });
+
+        app.delete("/api/todo/comment", function(req, res) {
+            db.collection('todos')
+                .findOne(
+                    {_id : ObjectId(req.body.id)}
+                )
+                .then(function(resp) {
+                    newComments = resp.comments.filter(function(comm){
+                        return comm !== req.body.comment;
+                    });
+                    db.collection('todos')
+                        .updateOne(
+                            {_id : ObjectId(req.body.id)},
+                            { $set: {comments : newComments} }
+                        )
+                        .then(function(rs) {
+                            res.sendStatus(200);
+                        })
+                })
+        });
+
+        //Set background
+        app.put("/api/todo/bck", function(req, res) {
+            var list = req.body.list;
+            db.collection('lists')
+                .updateOne(
+                    {name : list},
+                    { $set: {bck : req.body.bck} }
+                )
+                .then(function(rs) {
+                    res.sendStatus(200);
+                })
+        });
+
+        //Update
+        app.put("/api/todo/:list/:id", function(req, res) {
+            var list = req.params.list;
+            var id = req.params.id;
+            db.collection('todos')
+                .updateOne(
+                    {"_id" : ObjectId(id)},
+                    { $set: {title : req.body.title, isComplete : req.body.isComplete, comments : req.body.comments} }
+                )
+                .then(function(rs) {
+                    res.sendStatus(200);
+                })
+        });
+
+    });
 
     var server = app.listen(port, callback);
 
